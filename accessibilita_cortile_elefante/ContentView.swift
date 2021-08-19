@@ -16,21 +16,23 @@ struct ContentView : View {
 
 struct ARViewContainer: UIViewRepresentable {
     
-    func makeUIView(context: Context) -> ARView {
+    func makeUIView(context: Context) -> CustomARView {
         
-        let arView = ARView(frame: .zero)
+        let arView = CustomARView(frame: .zero)
         
-        // Load the "Box" scene from the "Experience" Reality File
-        let boxAnchor = try! Experience.loadBox()
-        
-        // Add the box anchor to the scene
-        arView.scene.anchors.append(boxAnchor)
+        arView.setup()
+
+        // Prevent the screen from being dimmed after a while as users will likely
+        // have long periods of interaction without touching the screen or buttons.
+        UIApplication.shared.isIdleTimerDisabled = true
         
         return arView
         
     }
     
-    func updateUIView(_ uiView: ARView, context: Context) {}
+    func updateUIView(_ uiView: CustomARView, context: Context) {
+    
+    }
     
 }
 
