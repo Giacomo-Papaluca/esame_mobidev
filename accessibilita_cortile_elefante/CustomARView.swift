@@ -10,8 +10,6 @@ import ARKit
 
 class CustomARView: ARView {
     
-    var saveble: Bool = false
-    var loadable: Bool = false
     
     var defaultConfiguration: ARWorldTrackingConfiguration {
         let configuration = ARWorldTrackingConfiguration()
@@ -34,6 +32,7 @@ class CustomARView: ARView {
         if self.worldMapData != nil {
             self.loadExperience()
         }
+        createWorldMapsFolder()
     }
     
     // MARK: - AR content
@@ -47,12 +46,54 @@ class CustomARView: ARView {
     
  
     // MARK: - Persistence: Saving and Loading
-    let storedData = UserDefaults.standard
-    let mapKey = "ar.worldmap"
+    
+    
+    /*lazy var mapSaveURL: URL = {
+        do {
+            return try FileManager.default
+                .url(for: .documentDirectory,
+                     in: .userDomainMask,
+                     appropriateFor: nil,
+                     create: true)
+                .appendingPathComponent("map.arexperience")
+        } catch {
+            fatalError("Can't get file save URL: \(error.localizedDescription)")
+        }
+    }()*/
+    
+    func createWorldMapsFolder() {
 
-    lazy var worldMapData: Data? = {
-        storedData.data(forKey: mapKey)
-    }()
+        let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first
+        if let documentDirectoryPath = documentDirectoryPath {
+
+            let replayDirectoryPath = documentDirectoryPath.appending("/WorldMaps")
+            let fileManager = FileManager.default
+
+            if !fileManager.fileExists(atPath: replayDirectoryPath) {
+
+                do {
+                    try fileManager.createDirectory(atPath: replayDirectoryPath, withIntermediateDirectories: false, attributes: nil)
+                } catch {
+                    print("Error creating Captures folder in documents dir: \(error)")
+                }
+            } else {
+                print("WorldMaps folder already created. No need to create.")
+            }
+        }
+    }
+    
+    var worldMapFilePath: String{
+
+            let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+            let documentsDirectory = paths[0] as String
+            let filePath: String = "\(documentsDirectory)/WorldMaps/WorldMap"
+            return filePath
+
+    }
+
+    var worldMapData: Data? {
+        return try? Data(contentsOf: URL(fileURLWithPath: self.worldMapFilePath))
+    }
     
     func resetTracking() {
         self.session.run(defaultConfiguration, options: [.resetTracking, .removeExistingAnchors])
@@ -138,7 +179,6 @@ class CustomARView: ARView {
         configuration.initialWorldMap = worldMap
         self.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
 
-        self.loadable = false
         isRelocalizingMap = true
         virtualObjectAnchor = nil
     }
@@ -152,8 +192,7 @@ class CustomARView: ARView {
             
             do {
                 let data = try NSKeyedArchiver.archivedData(withRootObject: map, requiringSecureCoding: true)
-                self.storedData.set(data, forKey: self.mapKey)
-                self.saveble = true
+                try data.write(to: URL(fileURLWithPath: self.worldMapFilePath), options: [.atomic])
             } catch {
                 fatalError("Can't save map: \(error.localizedDescription)")
             }
