@@ -1,173 +1,87 @@
 //
 //  CustomARView.swift
-//  ARPersistence-Realitykit
+//  accessibilita_cortile_elefante
 //
-//  Created by hgp on 1/17/21.
+//  Created by Giacomo Papaluca on 07/09/21.
 //
-import SwiftUI
+
+import UIKit
 import RealityKit
 import ARKit
 
-class CustomARView: ARView {
+class CustomARView: UIViewController, ARSessionDelegate {
+
+    @IBOutlet weak var arView: ARView!
     
+    @IBOutlet weak var salvaButton: UIButton!
     
     var defaultConfiguration: ARWorldTrackingConfiguration {
-        let configuration = ARWorldTrackingConfiguration()
-        configuration.planeDetection = .horizontal
-        configuration.environmentTexturing = .automatic
-        if ARWorldTrackingConfiguration.supportsSceneReconstruction(.mesh) {
-            configuration.sceneReconstruction = .mesh
-        }
-        return configuration
+            let configuration = ARWorldTrackingConfiguration()
+            configuration.planeDetection = .horizontal
+            configuration.environmentTexturing = .automatic
+            if ARWorldTrackingConfiguration.supportsSceneReconstruction(.mesh) {
+                configuration.sceneReconstruction = .mesh
+            }
+            return configuration
     }
-    
     
     // MARK: - Init and setup
-    
-    func setup() {
-        self.session.run(defaultConfiguration)
-        self.session.delegate = self
-        self.setupGestures()
-        self.debugOptions = [ .showFeaturePoints ]
-        if self.worldMapData != nil {
-            self.loadExperience()
+        
+        func setup() {
+            self.arView.session.run(defaultConfiguration)
+            self.arView.session.delegate = self
+            self.arView.debugOptions = [ .showFeaturePoints ]
+            if self.worldMapData != nil {
+                self.loadExperience()
+            }
+            createWorldMapsFolder()
         }
-        createWorldMapsFolder()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        // Do any additional setup after loading the view.
     }
     
-    // MARK: - AR content
-    var virtualObjectAnchor: ARAnchor?
-    let virtualObjectAnchorName = "virtualObject"
-    var virtualObject = AssetModel(name: "toy_biplane.usdz")
     
-    
-    // MARK: - AR session management
-    var isRelocalizingMap = false
-    
- 
     // MARK: - Persistence: Saving and Loading
-    
-    
-    /*lazy var mapSaveURL: URL = {
-        do {
-            return try FileManager.default
-                .url(for: .documentDirectory,
-                     in: .userDomainMask,
-                     appropriateFor: nil,
-                     create: true)
-                .appendingPathComponent("map.arexperience")
-        } catch {
-            fatalError("Can't get file save URL: \(error.localizedDescription)")
-        }
-    }()*/
-    
+        
     func createWorldMapsFolder() {
 
-        let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first
-        if let documentDirectoryPath = documentDirectoryPath {
+            let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first
+            if let documentDirectoryPath = documentDirectoryPath {
 
-            let replayDirectoryPath = documentDirectoryPath.appending("/WorldMaps")
-            let fileManager = FileManager.default
+                let replayDirectoryPath = documentDirectoryPath.appending("/WorldMaps")
+                let fileManager = FileManager.default
 
-            if !fileManager.fileExists(atPath: replayDirectoryPath) {
+                if !fileManager.fileExists(atPath: replayDirectoryPath) {
 
-                do {
-                    try fileManager.createDirectory(atPath: replayDirectoryPath, withIntermediateDirectories: false, attributes: nil)
-                } catch {
-                    print("Error creating Captures folder in documents dir: \(error)")
+                    do {
+                        try fileManager.createDirectory(atPath: replayDirectoryPath, withIntermediateDirectories: false, attributes: nil)
+                    } catch {
+                        print("Error creating Captures folder in documents dir: \(error)")
+                    }
+                } else {
+                    print("WorldMaps folder already created. No need to create.")
                 }
-            } else {
-                print("WorldMaps folder already created. No need to create.")
             }
         }
-    }
     
     var worldMapFilePath: String{
 
-            let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-            let documentsDirectory = paths[0] as String
-            let filePath: String = "\(documentsDirectory)/WorldMaps/WorldMap"
-            return filePath
+                let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+                let documentsDirectory = paths[0] as String
+                let filePath: String = "\(documentsDirectory)/WorldMaps/WorldMap"
+                return filePath
 
     }
-
+    
     var worldMapData: Data? {
-        return try? Data(contentsOf: URL(fileURLWithPath: self.worldMapFilePath))
+            return try? Data(contentsOf: URL(fileURLWithPath: self.worldMapFilePath))
     }
-    
-    func resetTracking() {
-        self.session.run(defaultConfiguration, options: [.resetTracking, .removeExistingAnchors])
-        self.isRelocalizingMap = false
-        self.virtualObjectAnchor = nil
-    }
-    
-    /// Add the tap gesture recogniser
-    func setupGestures() {
-      let tap = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:)))
-      self.addGestureRecognizer(tap)
-    }
-
-    // MARK: - Placing AR Content
-
-    @objc func handleTap(_ sender: UITapGestureRecognizer? = nil) {
-        // Disable placing objects when the session is still relocalizing
-        if isRelocalizingMap && virtualObjectAnchor == nil {
-            return
-        }
-        // Hit test to find a place for a virtual object.
-        guard let point = sender?.location(in: self),
-              let hitTestResult = self.hitTest(
-                point,
-                types: [.existingPlaneUsingGeometry, .estimatedHorizontalPlane]
-        ).first
-        else { return }
-
-        // Remove exisitng anchor and add new anchor
-        if let existingAnchor = virtualObjectAnchor {
-            self.session.remove(anchor: existingAnchor)
-        }
-        virtualObjectAnchor = ARAnchor(
-            name: virtualObjectAnchorName,
-            transform: hitTestResult.worldTransform
-        )
-        
-        // Add ARAnchor into ARView.session, which can be persisted in WorldMap
-        self.session.add(anchor: virtualObjectAnchor!)
-        installGestures(on: virtualObject.modelEntity!)
-    }
-    
-    func installGestures(on object:ModelEntity){
-        object.generateCollisionShapes(recursive: true)
-        self.installGestures([.rotation, .scale], for: object)
-    }
-    
-    //MARK: addAnchorEntityToScene
-    
-    func addAnchorEntityToScene(anchor: ARAnchor) {
-        guard anchor.name == virtualObjectAnchorName else {
-            return
-        }
-        // save the reference to the virtual object anchor when the anchor is added from relocalizing
-        if virtualObjectAnchor == nil {
-            virtualObjectAnchor = anchor
-        }
-        
-        if let modelEntity = virtualObject.modelEntity {
-            print("DEBUG: adding model to scene - \(virtualObject.name)")
-            
-            // Add modelEntity and anchorEntity into the scene for rendering
-            let anchorEntity = AnchorEntity(anchor: anchor)
-            anchorEntity.addChild(modelEntity)
-            self.scene.addAnchor(anchorEntity)
-        } else {
-            print("DEBUG: Unable to load modelEntity for \(virtualObject.name)")
-        }
-    }
-    
-    // MARK: - Persistence: Saving and Loading
     
     func loadExperience() {
-        
+            
         /// - Tag: ReadWorldMap
         let worldMap: ARWorldMap = {
             guard let data = self.worldMapData
@@ -180,17 +94,14 @@ class CustomARView: ARView {
                 fatalError("Can't unarchive ARWorldMap from file data: \(error)")
             }
         }()
-        
+            
         let configuration = self.defaultConfiguration // this app's standard world tracking settings
         configuration.initialWorldMap = worldMap
-        self.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
-
-        isRelocalizingMap = true
-        virtualObjectAnchor = nil
-    }
-    
+        self.arView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
+        }
+        
     func saveExperience() {
-        self.session.getCurrentWorldMap { worldMap, _ in
+        self.arView.session.getCurrentWorldMap { worldMap, _ in
             guard let map = worldMap else {
                 print("Can't get current world map")
                 return
@@ -205,34 +116,42 @@ class CustomARView: ARView {
         }
     }
     
-}
-
-// MARK: session delegate extension
-
-extension CustomARView: ARSessionDelegate {
-    
-    // MARK: - AR session delegate
-    func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
-        
+    @IBAction func SalvaDidTap(_ sender: Any) {
+        saveExperience()
     }
-    
-    // This is where we render virtual contents to scene.
-    // We add an anchor in `handleTap` function, it will then call this function.
-    func session(_ session: ARSession, didAdd anchors: [ARAnchor]) {
-        print("did add anchor: \(anchors.count) anchors in total")
-        
-        for anchor in anchors {
-            addAnchorEntityToScene(anchor: anchor)
+    // MARK: - Placing AR Content
+
+    @objc private func arViewDidTap(_ sender: UITapGestureRecognizer){
+        guard let result = self.arView.raycast(from: sender.location(in: self.arView), allowing: .existingPlaneGeometry, alignment: .horizontal).first else {
+            return
         }
+        let arAnchor = ARAnchor(name: "Raycast", transform: result.worldTransform)
+        self.arView.session.add(anchor: arAnchor)
+        let anchorEntity = AnchorEntity(anchor: arAnchor)
+        let carModel = try! ModelEntity.load(named: "toy_biplane")
+        anchorEntity.addChild(carModel)
+        self.arView.scene.addAnchor(anchorEntity)
     }
+
+    /*
+    // MARK: - Navigation
+
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destination.
+        // Pass the selected object to the new view controller.
+    }
+    */
     
-    /// - Tag: CheckMappingStatus
+    // MARK: - ARSessionDelegate
+    
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
-        // Enable Save button only when the mapping status is good and an object has been placed
         if frame.worldMappingStatus == .extending || frame.worldMappingStatus == .mapped {
-            saveExperience()
+            salvaButton.isEnabled=true
+        }
+        else {
+            salvaButton.isEnabled=false
         }
     }
 
-    
 }

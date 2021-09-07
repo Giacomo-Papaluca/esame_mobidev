@@ -7,15 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		24117F9826E7B22E0009005B /* CustomARView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24117F9626E7B22E0009005B /* CustomARView.swift */; };
+		24117F9926E7B22E0009005B /* CustomARView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 24117F9726E7B22E0009005B /* CustomARView.xib */; };
 		2413AD6A26CD66E900D7DBA8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2413AD6926CD66E900D7DBA8 /* AppDelegate.swift */; };
 		2413AD6C26CD66E900D7DBA8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2413AD6B26CD66E900D7DBA8 /* ContentView.swift */; };
 		2413AD6E26CD66E900D7DBA8 /* Experience.rcproject in Sources */ = {isa = PBXBuildFile; fileRef = 2413AD6D26CD66E900D7DBA8 /* Experience.rcproject */; };
 		2413AD7026CD66EA00D7DBA8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2413AD6F26CD66EA00D7DBA8 /* Assets.xcassets */; };
 		2413AD7326CD66EA00D7DBA8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2413AD7226CD66EA00D7DBA8 /* Preview Assets.xcassets */; };
-		2413AD7626CD66EA00D7DBA8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2413AD7426CD66EA00D7DBA8 /* LaunchScreen.storyboard */; };
 		2413AD8126CD66EA00D7DBA8 /* accessibilita_cortile_elefanteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2413AD8026CD66EA00D7DBA8 /* accessibilita_cortile_elefanteTests.swift */; };
 		2413AD8C26CD66EA00D7DBA8 /* accessibilita_cortile_elefanteUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2413AD8B26CD66EA00D7DBA8 /* accessibilita_cortile_elefanteUITests.swift */; };
-		2413AD9A26CD68AF00D7DBA8 /* CustomARView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2413AD9926CD68AF00D7DBA8 /* CustomARView.swift */; };
 		2413AD9C26CD6AF300D7DBA8 /* AssetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2413AD9B26CD6AF300D7DBA8 /* AssetModel.swift */; };
 		2413AD9F26CD6B3E00D7DBA8 /* toy_biplane.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 2413AD9E26CD6B3E00D7DBA8 /* toy_biplane.usdz */; };
 /* End PBXBuildFile section */
@@ -38,13 +38,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		24117F9626E7B22E0009005B /* CustomARView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomARView.swift; sourceTree = "<group>"; };
+		24117F9726E7B22E0009005B /* CustomARView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomARView.xib; sourceTree = "<group>"; };
 		2413AD6626CD66E900D7DBA8 /* accessibilita_cortile_elefante.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = accessibilita_cortile_elefante.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2413AD6926CD66E900D7DBA8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2413AD6B26CD66E900D7DBA8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		2413AD6D26CD66E900D7DBA8 /* Experience.rcproject */ = {isa = PBXFileReference; lastKnownFileType = file.rcproject; path = Experience.rcproject; sourceTree = "<group>"; };
 		2413AD6F26CD66EA00D7DBA8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2413AD7226CD66EA00D7DBA8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		2413AD7526CD66EA00D7DBA8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2413AD7726CD66EA00D7DBA8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2413AD7C26CD66EA00D7DBA8 /* accessibilita_cortile_elefanteTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = accessibilita_cortile_elefanteTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2413AD8026CD66EA00D7DBA8 /* accessibilita_cortile_elefanteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = accessibilita_cortile_elefanteTests.swift; sourceTree = "<group>"; };
@@ -52,7 +53,6 @@
 		2413AD8726CD66EA00D7DBA8 /* accessibilita_cortile_elefanteUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = accessibilita_cortile_elefanteUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2413AD8B26CD66EA00D7DBA8 /* accessibilita_cortile_elefanteUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = accessibilita_cortile_elefanteUITests.swift; sourceTree = "<group>"; };
 		2413AD8D26CD66EA00D7DBA8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2413AD9926CD68AF00D7DBA8 /* CustomARView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomARView.swift; sourceTree = "<group>"; };
 		2413AD9B26CD6AF300D7DBA8 /* AssetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetModel.swift; sourceTree = "<group>"; };
 		2413AD9E26CD6B3E00D7DBA8 /* toy_biplane.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = toy_biplane.usdz; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -108,11 +108,11 @@
 				2413AD9D26CD6B2100D7DBA8 /* Assets */,
 				2413AD6926CD66E900D7DBA8 /* AppDelegate.swift */,
 				2413AD6B26CD66E900D7DBA8 /* ContentView.swift */,
-				2413AD9926CD68AF00D7DBA8 /* CustomARView.swift */,
+				24117F9626E7B22E0009005B /* CustomARView.swift */,
+				24117F9726E7B22E0009005B /* CustomARView.xib */,
 				2413AD9B26CD6AF300D7DBA8 /* AssetModel.swift */,
 				2413AD6D26CD66E900D7DBA8 /* Experience.rcproject */,
 				2413AD6F26CD66EA00D7DBA8 /* Assets.xcassets */,
-				2413AD7426CD66EA00D7DBA8 /* LaunchScreen.storyboard */,
 				2413AD7726CD66EA00D7DBA8 /* Info.plist */,
 				2413AD7126CD66EA00D7DBA8 /* Preview Content */,
 			);
@@ -256,9 +256,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2413AD7626CD66EA00D7DBA8 /* LaunchScreen.storyboard in Resources */,
 				2413AD7326CD66EA00D7DBA8 /* Preview Assets.xcassets in Resources */,
 				2413AD9F26CD6B3E00D7DBA8 /* toy_biplane.usdz in Resources */,
+				24117F9926E7B22E0009005B /* CustomARView.xib in Resources */,
 				2413AD7026CD66EA00D7DBA8 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -284,9 +284,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				24117F9826E7B22E0009005B /* CustomARView.swift in Sources */,
 				2413AD6C26CD66E900D7DBA8 /* ContentView.swift in Sources */,
 				2413AD6A26CD66E900D7DBA8 /* AppDelegate.swift in Sources */,
-				2413AD9A26CD68AF00D7DBA8 /* CustomARView.swift in Sources */,
 				2413AD9C26CD6AF300D7DBA8 /* AssetModel.swift in Sources */,
 				2413AD6E26CD66E900D7DBA8 /* Experience.rcproject in Sources */,
 			);
@@ -322,17 +322,6 @@
 			targetProxy = 2413AD8826CD66EA00D7DBA8 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		2413AD7426CD66EA00D7DBA8 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				2413AD7526CD66EA00D7DBA8 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		2413AD8E26CD66EA00D7DBA8 /* Debug */ = {

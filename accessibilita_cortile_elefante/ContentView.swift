@@ -14,25 +14,18 @@ struct ContentView : View {
     }
 }
 
-struct ARViewContainer: UIViewRepresentable {
+struct ARViewContainer: UIViewControllerRepresentable {
+    typealias UIViewControllerType = CustomARView
     
-    func makeUIView(context: Context) -> CustomARView {
-        
-        let arView = CustomARView(frame: .zero)
-        
-        arView.setup()
-
-        // Prevent the screen from being dimmed after a while as users will likely
-        // have long periods of interaction without touching the screen or buttons.
-        UIApplication.shared.isIdleTimerDisabled = true
-        
-        return arView
-        
+    func makeUIViewController(context: Context) -> CustomARView {
+        let customView = CustomARView(nibName: "CustomARView", bundle: .main)
+        return customView
     }
     
-    func updateUIView(_ uiView: CustomARView, context: Context) {
-    
+    func updateUIViewController(_ uiViewController: CustomARView, context: Context) {
+        
     }
+   
     
 }
 
