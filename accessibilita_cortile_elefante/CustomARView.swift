@@ -130,8 +130,14 @@ class CustomARView: UIViewController, ARSessionDelegate {
         let anchorEntity = AnchorEntity(anchor: arAnchor)
         let carModel = try! ModelEntity.load(named: "toy_biplane")
         anchorEntity.addChild(carModel)
+        installGestures(on: carModel as! ModelEntity)
         self.arView.scene.addAnchor(anchorEntity)
     }
+    
+    func installGestures(on object:ModelEntity){
+           object.generateCollisionShapes(recursive: true)
+           arView.installGestures([.rotation, .scale], for: object)
+       }
 
     /*
     // MARK: - Navigation
