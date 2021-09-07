@@ -133,6 +133,12 @@ class CustomARView: ARView {
         
         // Add ARAnchor into ARView.session, which can be persisted in WorldMap
         self.session.add(anchor: virtualObjectAnchor!)
+        installGestures(on: virtualObject.modelEntity!)
+    }
+    
+    func installGestures(on object:ModelEntity){
+        object.generateCollisionShapes(recursive: true)
+        self.installGestures([.rotation, .scale], for: object)
     }
     
     //MARK: addAnchorEntityToScene
