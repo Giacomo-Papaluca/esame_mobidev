@@ -15,8 +15,6 @@ class CustomARView: UIViewController, ARSessionDelegate {
     
     @IBOutlet weak var salvaButton: UIButton!
     
-    private var planeAnchor: AnchorEntity?
-    
     var defaultConfiguration: ARWorldTrackingConfiguration {
             let configuration = ARWorldTrackingConfiguration()
             configuration.planeDetection = .horizontal
