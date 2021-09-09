@@ -15,6 +15,8 @@ class CustomARView: UIViewController, ARSessionDelegate {
     
     @IBOutlet weak var salvaButton: UIButton!
     
+    private var planeAnchor: AnchorEntity?
+    
     var defaultConfiguration: ARWorldTrackingConfiguration {
             let configuration = ARWorldTrackingConfiguration()
             configuration.planeDetection = .horizontal
@@ -27,19 +29,20 @@ class CustomARView: UIViewController, ARSessionDelegate {
     
     // MARK: - Init and setup
         
-        func setup() {
-            self.arView.session.run(defaultConfiguration)
-            self.arView.session.delegate = self
-            self.arView.debugOptions = [ .showFeaturePoints ]
-            if self.worldMapData != nil {
-                self.loadExperience()
-            }
-            createWorldMapsFolder()
+    func setup() {
+        self.arView.session.run(defaultConfiguration)
+        self.arView.session.delegate = self
+        self.arView.debugOptions = [ .showFeaturePoints ]
+        self.arView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(arViewDidTap(_:))) )
+        if self.worldMapData != nil {
+            self.loadExperience()
         }
+        createWorldMapsFolder()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.setup()
         // Do any additional setup after loading the view.
     }
     
@@ -48,24 +51,24 @@ class CustomARView: UIViewController, ARSessionDelegate {
         
     func createWorldMapsFolder() {
 
-            let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first
-            if let documentDirectoryPath = documentDirectoryPath {
+        let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first
+        if let documentDirectoryPath = documentDirectoryPath {
+                
+            let replayDirectoryPath = documentDirectoryPath.appending("/WorldMaps")
+            let fileManager = FileManager.default
 
-                let replayDirectoryPath = documentDirectoryPath.appending("/WorldMaps")
-                let fileManager = FileManager.default
+            if !fileManager.fileExists(atPath: replayDirectoryPath) {
 
-                if !fileManager.fileExists(atPath: replayDirectoryPath) {
-
-                    do {
-                        try fileManager.createDirectory(atPath: replayDirectoryPath, withIntermediateDirectories: false, attributes: nil)
-                    } catch {
-                        print("Error creating Captures folder in documents dir: \(error)")
-                    }
-                } else {
-                    print("WorldMaps folder already created. No need to create.")
+                do {
+                    try fileManager.createDirectory(atPath: replayDirectoryPath, withIntermediateDirectories: false, attributes: nil)
+                } catch {
+                    print("Error creating Captures folder in documents dir: \(error)")
                 }
+            } else {
+                print("WorldMaps folder already created. No need to create.")
             }
         }
+    }
     
     var worldMapFilePath: String{
 
@@ -122,15 +125,16 @@ class CustomARView: UIViewController, ARSessionDelegate {
     // MARK: - Placing AR Content
 
     @objc private func arViewDidTap(_ sender: UITapGestureRecognizer){
+        print("ciao")
         guard let result = self.arView.raycast(from: sender.location(in: self.arView), allowing: .existingPlaneGeometry, alignment: .horizontal).first else {
             return
         }
         let arAnchor = ARAnchor(name: "Raycast", transform: result.worldTransform)
         self.arView.session.add(anchor: arAnchor)
         let anchorEntity = AnchorEntity(anchor: arAnchor)
-        let carModel = try! ModelEntity.load(named: "toy_biplane")
+        let carModel = try! ModelEntity.loadModel(named: "toy_biplane")
         anchorEntity.addChild(carModel)
-        installGestures(on: carModel as! ModelEntity)
+        installGestures(on: carModel)
         self.arView.scene.addAnchor(anchorEntity)
     }
     
@@ -138,6 +142,8 @@ class CustomARView: UIViewController, ARSessionDelegate {
            object.generateCollisionShapes(recursive: true)
            arView.installGestures([.rotation, .scale], for: object)
        }
+    
+   
 
     /*
     // MARK: - Navigation
@@ -159,5 +165,6 @@ class CustomARView: UIViewController, ARSessionDelegate {
             salvaButton.isEnabled=false
         }
     }
+    
 
 }
