@@ -61,6 +61,17 @@ class CustomARView: UIViewController, ARSessionDelegate {
     }
         
    
+    func addAnchorEntityToScene(anchor: ARAnchor) {
+        switch anchor.name {
+            case "Raycast":
+                let anchorEntity = AnchorEntity(anchor: anchor)
+                let toyBiplaneEntity = try! ModelEntity.loadModel(named: "toy_biplane")
+                anchorEntity.addChild(toyBiplaneEntity)
+                self.arView.scene.anchors.append(anchorEntity)
+            default:
+                return
+        }
+    }
 
     /*
     // MARK: - Navigation
@@ -71,6 +82,16 @@ class CustomARView: UIViewController, ARSessionDelegate {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    // MARK: - ARSessionDelegate
+    
+    func session(_ session: ARSession, didAdd anchors: [ARAnchor]) {
+        print("did add anchor: \(anchors.count) anchors in total")
+            
+        for anchor in anchors {
+            addAnchorEntityToScene(anchor: anchor)
+        }
+    }
     
 
 }

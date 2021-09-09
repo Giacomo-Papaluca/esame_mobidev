@@ -11,7 +11,6 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CustomARView" customModule="accessibilita_cortile_elefante" customModuleProvider="target">
             <connections>
                 <outlet property="arView" destination="xlJ-V5-f2v" id="0e9-6Z-jnj"/>
-                <outlet property="salvaButton" destination="C2E-1C-e3f" id="PPs-3z-vte"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -23,27 +22,14 @@
                 <arView multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xlJ-V5-f2v">
                     <rect key="frame" x="0.0" y="44" width="414" height="818"/>
                 </arView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C2E-1C-e3f">
-                    <rect key="frame" x="182" y="822" width="50" height="40"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="40" id="2Te-PU-kOH"/>
-                        <constraint firstAttribute="width" constant="50" id="gRx-Mj-6E7"/>
-                    </constraints>
-                    <state key="normal" title="Salva"/>
-                    <connections>
-                        <action selector="SalvaDidTap:" destination="-1" eventType="touchUpInside" id="Lzl-QW-PIA"/>
-                    </connections>
-                </button>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="xlJ-V5-f2v" secondAttribute="bottom" id="6TK-iw-ty1"/>
-                <constraint firstItem="C2E-1C-e3f" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="9Ra-rB-0zP"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="xlJ-V5-f2v" secondAttribute="trailing" id="CCm-RI-rrU"/>
                 <constraint firstItem="xlJ-V5-f2v" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="WgO-89-FBp"/>
                 <constraint firstItem="xlJ-V5-f2v" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="raR-qU-gdQ"/>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="C2E-1C-e3f" secondAttribute="bottom" id="zzV-xX-d0X"/>
             </constraints>
             <point key="canvasLocation" x="137.68115942028987" y="63.616071428571423"/>
         </view>
