@@ -17,7 +17,7 @@
 		2413AD8126CD66EA00D7DBA8 /* accessibilita_cortile_elefanteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2413AD8026CD66EA00D7DBA8 /* accessibilita_cortile_elefanteTests.swift */; };
 		2413AD8C26CD66EA00D7DBA8 /* accessibilita_cortile_elefanteUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2413AD8B26CD66EA00D7DBA8 /* accessibilita_cortile_elefanteUITests.swift */; };
 		2417588A26E9FBD0007F387E /* toy_biplane.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 2417588926E9FBD0007F387E /* toy_biplane.usdz */; };
-		2417589326EA0705007F387E /* WorldMap in Resources */ = {isa = PBXBuildFile; fileRef = 2417589226EA0705007F387E /* WorldMap */; };
+		2417589526EA0A6B007F387E /* WorldMap in Resources */ = {isa = PBXBuildFile; fileRef = 2417589426EA0A6B007F387E /* WorldMap */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,7 +54,7 @@
 		2413AD8B26CD66EA00D7DBA8 /* accessibilita_cortile_elefanteUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = accessibilita_cortile_elefanteUITests.swift; sourceTree = "<group>"; };
 		2413AD8D26CD66EA00D7DBA8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2417588926E9FBD0007F387E /* toy_biplane.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = toy_biplane.usdz; sourceTree = "<group>"; };
-		2417589226EA0705007F387E /* WorldMap */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; name = WorldMap; path = ../../../../Desktop/WorldMap; sourceTree = "<group>"; };
+		2417589426EA0A6B007F387E /* WorldMap */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; name = WorldMap; path = ../../../../Desktop/WorldMap; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,7 +105,7 @@
 		2413AD6826CD66E900D7DBA8 /* accessibilita_cortile_elefante */ = {
 			isa = PBXGroup;
 			children = (
-				2417589226EA0705007F387E /* WorldMap */,
+				2417589426EA0A6B007F387E /* WorldMap */,
 				2417588826E9FBA3007F387E /* Models */,
 				2413AD6926CD66E900D7DBA8 /* AppDelegate.swift */,
 				2413AD6B26CD66E900D7DBA8 /* ContentView.swift */,
@@ -258,7 +258,7 @@
 			files = (
 				2413AD7326CD66EA00D7DBA8 /* Preview Assets.xcassets in Resources */,
 				24117F9926E7B22E0009005B /* CustomARView.xib in Resources */,
-				2417589326EA0705007F387E /* WorldMap in Resources */,
+				2417589526EA0A6B007F387E /* WorldMap in Resources */,
 				2417588A26E9FBD0007F387E /* toy_biplane.usdz in Resources */,
 				2413AD7026CD66EA00D7DBA8 /* Assets.xcassets in Resources */,
 			);
