@@ -123,16 +123,16 @@ class CustomARView: UIViewController, ARSessionDelegate {
     // MARK: - Placing AR Content
 
     @objc private func arViewDidTap(_ sender: UITapGestureRecognizer){
-        print("ciao")
         guard let result = self.arView.raycast(from: sender.location(in: self.arView), allowing: .existingPlaneGeometry, alignment: .horizontal).first else {
             return
         }
         let arAnchor = ARAnchor(name: "Raycast", transform: result.worldTransform)
         self.arView.session.add(anchor: arAnchor)
         let anchorEntity = AnchorEntity(anchor: arAnchor)
-        let carModel = try! ModelEntity.loadModel(named: "toy_biplane")
-        anchorEntity.addChild(carModel)
-        installGestures(on: carModel)
+        let biplaneModel = try! ModelEntity.loadModel(named: "toy_biplane")
+        anchorEntity.addChild(biplaneModel)
+        installGestures(on: biplaneModel)
+        anchorEntity.name = "biplaneAnchor"
         self.arView.scene.addAnchor(anchorEntity)
     }
     
