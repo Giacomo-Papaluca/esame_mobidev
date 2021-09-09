@@ -11,18 +11,42 @@ import ARKit
 
 class CustomARView: UIViewController, ARSessionDelegate {
 
+    @IBOutlet weak var statusLabel: UILabel!
+    
     @IBOutlet weak var arView: ARView!
     
     @IBOutlet weak var salvaButton: UIButton!
+    
+    private var actualObject: String = ""
     
     var defaultConfiguration: ARWorldTrackingConfiguration {
             let configuration = ARWorldTrackingConfiguration()
             configuration.planeDetection = .horizontal
             configuration.environmentTexturing = .automatic
-            if ARWorldTrackingConfiguration.supportsSceneReconstruction(.mesh) {
-                configuration.sceneReconstruction = .mesh
-            }
             return configuration
+    }
+    
+    @IBOutlet var showMenuButton: UIButton!
+        
+    var menuItems: [UIAction] {
+        return [
+            UIAction(title: "biplane") {_ in
+                self.actualObject = "biplane"
+            },
+            UIAction(title: "square") { _ in
+                self.actualObject = "square"
+            }
+        ]
+    }
+    
+
+    var demoMenu: UIMenu {
+        return UIMenu(title: "oggetti", image: nil, identifier: nil, options: [], children: menuItems)
+    }
+
+    func configureButtonMenu() {
+        showMenuButton.menu = demoMenu
+        showMenuButton.showsMenuAsPrimaryAction = true
     }
     
     // MARK: - Init and setup
@@ -41,6 +65,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setup()
+        self.configureButtonMenu()
         // Do any additional setup after loading the view.
     }
     
@@ -126,13 +151,28 @@ class CustomARView: UIViewController, ARSessionDelegate {
         guard let result = self.arView.raycast(from: sender.location(in: self.arView), allowing: .existingPlaneGeometry, alignment: .horizontal).first else {
             return
         }
-        let arAnchor = ARAnchor(name: "Raycast", transform: result.worldTransform)
+        
+        let arAnchor = ARAnchor(name: actualObject, transform: result.worldTransform)
         self.arView.session.add(anchor: arAnchor)
         let anchorEntity = AnchorEntity(anchor: arAnchor)
-        let biplaneModel = try! ModelEntity.loadModel(named: "toy_biplane")
-        anchorEntity.addChild(biplaneModel)
-        installGestures(on: biplaneModel)
-        anchorEntity.name = "biplaneAnchor"
+        
+        switch actualObject {
+        case "biplane":
+            let biplaneModel = try! ModelEntity.loadModel(named: "toy_biplane")
+            anchorEntity.addChild(biplaneModel)
+            installGestures(on: biplaneModel)
+            break
+        case "square":
+            let planeMesh = MeshResource.generatePlane(width: 0.3, depth: 0.3)
+            var planeMaterial = UnlitMaterial()
+            planeMaterial.baseColor = MaterialColorParameter.color(.green)
+            let planeModel = ModelEntity(mesh: planeMesh, materials: [planeMaterial])
+            anchorEntity.addChild(planeModel)
+            break
+        default:
+            return
+        }
+        
         self.arView.scene.addAnchor(anchorEntity)
     }
     
@@ -162,7 +202,28 @@ class CustomARView: UIViewController, ARSessionDelegate {
         else {
             salvaButton.isEnabled=false
         }
+        statusLabel.text = """
+        Mapping: \(frame.worldMappingStatus.description)
+        """
     }
     
 
 }
+
+extension ARFrame.WorldMappingStatus: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .notAvailable:
+            return "Not Available"
+        case .limited:
+            return "Limited"
+        case .extending:
+            return "Extending"
+        case .mapped:
+            return "Mapped"
+        @unknown default:
+            return "Unknown"
+        }
+    }
+}
+

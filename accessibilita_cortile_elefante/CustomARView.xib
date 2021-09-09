@@ -12,6 +12,8 @@
             <connections>
                 <outlet property="arView" destination="xlJ-V5-f2v" id="0e9-6Z-jnj"/>
                 <outlet property="salvaButton" destination="C2E-1C-e3f" id="PPs-3z-vte"/>
+                <outlet property="showMenuButton" destination="Gkm-C2-n0m" id="YVi-ON-5JM"/>
+                <outlet property="statusLabel" destination="KRS-fs-eBR" id="K2a-X3-bhp"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -34,15 +36,29 @@
                         <action selector="SalvaDidTap:" destination="-1" eventType="touchUpInside" id="Lzl-QW-PIA"/>
                     </connections>
                 </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gkm-C2-n0m">
+                    <rect key="frame" x="187.5" y="733" width="39" height="64"/>
+                    <state key="normal" title="Menu"/>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KRS-fs-eBR">
+                    <rect key="frame" x="0.0" y="62" width="414" height="235"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="xlJ-V5-f2v" secondAttribute="bottom" id="6TK-iw-ty1"/>
+                <constraint firstItem="C2E-1C-e3f" firstAttribute="top" secondItem="Gkm-C2-n0m" secondAttribute="bottom" constant="25" id="8aH-LV-3Jr"/>
                 <constraint firstItem="C2E-1C-e3f" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="9Ra-rB-0zP"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="xlJ-V5-f2v" secondAttribute="trailing" id="CCm-RI-rrU"/>
+                <constraint firstItem="Gkm-C2-n0m" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="Riw-m6-Wfs"/>
                 <constraint firstItem="xlJ-V5-f2v" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="WgO-89-FBp"/>
                 <constraint firstItem="xlJ-V5-f2v" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="raR-qU-gdQ"/>
+                <constraint firstItem="Gkm-C2-n0m" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="689" id="wEl-4o-faU"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="C2E-1C-e3f" secondAttribute="bottom" id="zzV-xX-d0X"/>
             </constraints>
             <point key="canvasLocation" x="137.68115942028987" y="63.616071428571423"/>
