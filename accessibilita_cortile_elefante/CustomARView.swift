@@ -138,7 +138,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
     
     func installGestures(on object:ModelEntity){
            object.generateCollisionShapes(recursive: true)
-           arView.installGestures([.rotation, .scale], for: object)
+        arView.installGestures([.rotation, .scale, .translation], for: object)
        }
     
    
