@@ -69,10 +69,18 @@ class CustomARView: UIViewController, ARSessionDelegate {
                 anchorEntity.addChild(toyBiplaneEntity)
                 self.arView.scene.anchors.append(anchorEntity)
                 break
-            case "square":
+            case "greenSquare":
                 let planeMesh = MeshResource.generatePlane(width: 0.3, depth: 0.3)
                 var planeMaterial = UnlitMaterial()
-                planeMaterial.baseColor = MaterialColorParameter.color(.green)
+                planeMaterial.baseColor = MaterialColorParameter.color(.green.withAlphaComponent(0.7))
+                let planeModel = ModelEntity(mesh: planeMesh, materials: [planeMaterial])
+                anchorEntity.addChild(planeModel)
+                self.arView.scene.anchors.append(anchorEntity)
+                break
+            case "redSquare":
+                let planeMesh = MeshResource.generatePlane(width: 0.3, depth: 0.3)
+                var planeMaterial = UnlitMaterial()
+                planeMaterial.baseColor = MaterialColorParameter.color(.red.withAlphaComponent(0.7))
                 let planeModel = ModelEntity(mesh: planeMesh, materials: [planeMaterial])
                 anchorEntity.addChild(planeModel)
                 self.arView.scene.anchors.append(anchorEntity)
