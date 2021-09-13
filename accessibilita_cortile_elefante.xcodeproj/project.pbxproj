@@ -443,14 +443,14 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"accessibilita_cortile_elefante/Preview Content\"";
-				DEVELOPMENT_TEAM = S7YAG3BZVH;
+				DEVELOPMENT_TEAM = F3773LZJ2V;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = accessibilita_cortile_elefante/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = marcocartile;
+				PRODUCT_BUNDLE_IDENTIFIER = papaluca.elefante;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -464,14 +464,14 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"accessibilita_cortile_elefante/Preview Content\"";
-				DEVELOPMENT_TEAM = S7YAG3BZVH;
+				DEVELOPMENT_TEAM = F3773LZJ2V;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = accessibilita_cortile_elefante/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = marcocartile;
+				PRODUCT_BUNDLE_IDENTIFIER = papaluca.elefante;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

@@ -33,8 +33,11 @@ class CustomARView: UIViewController, ARSessionDelegate {
             UIAction(title: "biplane") {_ in
                 self.actualObject = "biplane"
             },
-            UIAction(title: "square") { _ in
-                self.actualObject = "square"
+            UIAction(title: "greenSquare") { _ in
+                self.actualObject = "greenSquare"
+            },
+            UIAction(title: "redSquare") { _ in
+                self.actualObject = "redSquare"
             }
         ]
     }
@@ -159,16 +162,20 @@ class CustomARView: UIViewController, ARSessionDelegate {
         switch actualObject {
         case "biplane":
             let biplaneModel = try! ModelEntity.loadModel(named: "toy_biplane")
-            biplaneModel.scale.x = 0.05
-            biplaneModel.scale.y = 0.05
-            biplaneModel.scale.z = 0.05
             anchorEntity.addChild(biplaneModel)
             installGestures(on: biplaneModel)
             break
-        case "square":
+        case "greenSquare":
             let planeMesh = MeshResource.generatePlane(width: 0.3, depth: 0.3)
             var planeMaterial = SimpleMaterial()
             planeMaterial.baseColor = MaterialColorParameter.color(.green.withAlphaComponent(0.7))
+            let planeModel = ModelEntity(mesh: planeMesh, materials: [planeMaterial])
+            anchorEntity.addChild(planeModel)
+            break
+        case "redSquare":
+            let planeMesh = MeshResource.generatePlane(width: 0.3, depth: 0.3)
+            var planeMaterial = SimpleMaterial()
+            planeMaterial.baseColor = MaterialColorParameter.color(.red.withAlphaComponent(0.7))
             let planeModel = ModelEntity(mesh: planeMesh, materials: [planeMaterial])
             anchorEntity.addChild(planeModel)
             break

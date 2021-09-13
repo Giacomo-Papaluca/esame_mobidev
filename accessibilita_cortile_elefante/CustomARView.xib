@@ -25,16 +25,17 @@
                 <arView multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xlJ-V5-f2v">
                     <rect key="frame" x="0.0" y="44" width="414" height="818"/>
                 </arView>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gkm-C2-n0m">
-                    <rect key="frame" x="53" y="754" width="147" height="40"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gkm-C2-n0m">
+                    <rect key="frame" x="53" y="746" width="147" height="36"/>
                     <color key="backgroundColor" systemColor="systemBlueColor"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="147" id="Zb7-5m-kZT"/>
+                    </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                     <state key="normal" title="Menu"/>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C2E-1C-e3f">
-                    <rect key="frame" x="208" y="754" width="147" height="40"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C2E-1C-e3f">
+                    <rect key="frame" x="208" y="746" width="147" height="36"/>
                     <color key="backgroundColor" systemColor="systemBlueColor"/>
                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                     <state key="normal" title="Salva">
@@ -57,8 +58,13 @@
             <constraints>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="xlJ-V5-f2v" secondAttribute="bottom" id="6TK-iw-ty1"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="xlJ-V5-f2v" secondAttribute="trailing" id="CCm-RI-rrU"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="Gkm-C2-n0m" secondAttribute="bottom" constant="80" id="GW0-gp-Hhm"/>
+                <constraint firstItem="C2E-1C-e3f" firstAttribute="leading" secondItem="Gkm-C2-n0m" secondAttribute="trailing" constant="8" symbolic="YES" id="GaW-C9-lDE"/>
+                <constraint firstItem="Gkm-C2-n0m" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="53" id="KVy-KS-0Ol"/>
                 <constraint firstItem="xlJ-V5-f2v" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="WgO-89-FBp"/>
                 <constraint firstItem="xlJ-V5-f2v" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="raR-qU-gdQ"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="C2E-1C-e3f" secondAttribute="trailing" constant="59" id="sBg-2r-kMn"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="C2E-1C-e3f" secondAttribute="bottom" constant="80" id="vDg-2v-nPX"/>
             </constraints>
             <point key="canvasLocation" x="137.68115942028987" y="63.616071428571423"/>
         </view>
