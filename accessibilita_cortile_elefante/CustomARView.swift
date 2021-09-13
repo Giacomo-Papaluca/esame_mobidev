@@ -159,13 +159,16 @@ class CustomARView: UIViewController, ARSessionDelegate {
         switch actualObject {
         case "biplane":
             let biplaneModel = try! ModelEntity.loadModel(named: "toy_biplane")
+            biplaneModel.scale.x = 0.05
+            biplaneModel.scale.y = 0.05
+            biplaneModel.scale.z = 0.05
             anchorEntity.addChild(biplaneModel)
             installGestures(on: biplaneModel)
             break
         case "square":
             let planeMesh = MeshResource.generatePlane(width: 0.3, depth: 0.3)
-            var planeMaterial = UnlitMaterial()
-            planeMaterial.baseColor = MaterialColorParameter.color(.green)
+            var planeMaterial = SimpleMaterial()
+            planeMaterial.baseColor = MaterialColorParameter.color(.green.withAlphaComponent(0.7))
             let planeModel = ModelEntity(mesh: planeMesh, materials: [planeMaterial])
             anchorEntity.addChild(planeModel)
             break
@@ -181,7 +184,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
         arView.installGestures([.rotation, .scale, .translation], for: object)
        }
     
-   
+    
 
     /*
     // MARK: - Navigation

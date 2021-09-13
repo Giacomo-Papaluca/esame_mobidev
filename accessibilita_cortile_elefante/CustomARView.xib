@@ -25,25 +25,29 @@
                 <arView multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xlJ-V5-f2v">
                     <rect key="frame" x="0.0" y="44" width="414" height="818"/>
                 </arView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C2E-1C-e3f">
-                    <rect key="frame" x="182" y="822" width="50" height="40"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="40" id="2Te-PU-kOH"/>
-                        <constraint firstAttribute="width" constant="50" id="gRx-Mj-6E7"/>
-                    </constraints>
-                    <state key="normal" title="Salva"/>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gkm-C2-n0m">
+                    <rect key="frame" x="53" y="754" width="147" height="40"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" systemColor="systemBlueColor"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                    <state key="normal" title="Menu"/>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C2E-1C-e3f">
+                    <rect key="frame" x="208" y="754" width="147" height="40"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" systemColor="systemBlueColor"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                    <state key="normal" title="Salva">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </state>
                     <connections>
                         <action selector="SalvaDidTap:" destination="-1" eventType="touchUpInside" id="Lzl-QW-PIA"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gkm-C2-n0m">
-                    <rect key="frame" x="187.5" y="733" width="39" height="64"/>
-                    <state key="normal" title="Menu"/>
-                </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KRS-fs-eBR">
-                    <rect key="frame" x="0.0" y="62" width="414" height="235"/>
+                    <rect key="frame" x="102" y="128" width="234" height="72"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
@@ -52,14 +56,9 @@
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="xlJ-V5-f2v" secondAttribute="bottom" id="6TK-iw-ty1"/>
-                <constraint firstItem="C2E-1C-e3f" firstAttribute="top" secondItem="Gkm-C2-n0m" secondAttribute="bottom" constant="25" id="8aH-LV-3Jr"/>
-                <constraint firstItem="C2E-1C-e3f" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="9Ra-rB-0zP"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="xlJ-V5-f2v" secondAttribute="trailing" id="CCm-RI-rrU"/>
-                <constraint firstItem="Gkm-C2-n0m" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="Riw-m6-Wfs"/>
                 <constraint firstItem="xlJ-V5-f2v" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="WgO-89-FBp"/>
                 <constraint firstItem="xlJ-V5-f2v" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="raR-qU-gdQ"/>
-                <constraint firstItem="Gkm-C2-n0m" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="689" id="wEl-4o-faU"/>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="C2E-1C-e3f" secondAttribute="bottom" id="zzV-xX-d0X"/>
             </constraints>
             <point key="canvasLocation" x="137.68115942028987" y="63.616071428571423"/>
         </view>
@@ -67,6 +66,9 @@
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBlueColor">
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
