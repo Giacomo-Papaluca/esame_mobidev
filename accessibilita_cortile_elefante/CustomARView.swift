@@ -62,12 +62,16 @@ class CustomARView: UIViewController, ARSessionDelegate {
         
    
     func addAnchorEntityToScene(anchor: ARAnchor) {
-        let anchorEntity = AnchorEntity(anchor: anchor)
+        guard let arAnchor = anchor as? CustomARAnchor else {return}
+        let anchorEntity = AnchorEntity(anchor: arAnchor)
         switch anchor.name {
             case "biplane":
                 let toyBiplaneEntity = try! ModelEntity.loadModel(named: "toy_biplane")
                 anchorEntity.addChild(toyBiplaneEntity)
                 self.arView.scene.anchors.append(anchorEntity)
+                toyBiplaneEntity.scale = arAnchor.modelScale!
+                toyBiplaneEntity.orientation = arAnchor.modelOrientation!
+                toyBiplaneEntity.position = arAnchor.modelPosition!
                 break
             case "greenSquare":
                 let planeMesh = MeshResource.generatePlane(width: 0.3, depth: 0.3)
