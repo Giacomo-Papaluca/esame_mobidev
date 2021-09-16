@@ -10,7 +10,9 @@ import RealityKit
 import ARKit
 
 class CustomARView: UIViewController, ARSessionDelegate {
-
+    
+    @IBOutlet weak var snapshotThumbnail: UIImageView!
+    
     @IBOutlet weak var arView: ARView!
     
     @IBOutlet weak var salvaButton: UIButton!
@@ -72,6 +74,16 @@ class CustomARView: UIViewController, ARSessionDelegate {
           
         let worldMap = try! NSKeyedUnarchiver.unarchivedObject(ofClass: ARWorldMap.self, from: mapData)
         
+        
+        if let snapshotData = worldMap!.snapshotAnchor?.imageData,
+            let snapshot = UIImage(data: snapshotData) {
+            self.snapshotThumbnail.image = snapshot
+        } else {
+            print("No snapshot image in world map")
+        }
+        // Remove the snapshot anchor from the world map since we do not need it in the scene.
+        worldMap!.anchors.removeAll(where: {$0 is SnapshotAnchor})
+        
         let configuration = self.defaultConfiguration // this app's standard world tracking settings
         configuration.initialWorldMap = worldMap
         self.arView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
@@ -92,12 +104,9 @@ class CustomARView: UIViewController, ARSessionDelegate {
         let anchorEntity = AnchorEntity(anchor: anchor)
         switch anchor.name {
             case "biplane":
-                guard let arAnchor = anchor as? CustomARAnchor else {return}
-                let anchorEntity = AnchorEntity(anchor: arAnchor)
-                let toyBiplaneEntity = try! ModelEntity.loadModel(named: "toy_biplane")
+                let toyBiplaneEntity = models[0].modelEntity!
                 anchorEntity.addChild(toyBiplaneEntity)
                 self.arView.scene.anchors.append(anchorEntity)
-                toyBiplaneEntity.scale = SIMD3.init(arAnchor.modelScalex, arAnchor.modelScaley, arAnchor.modelScalez)
                 break
             case "greenSquare":
                 let planeMesh = MeshResource.generatePlane(width: 0.3, depth: 0.3)
@@ -144,4 +153,30 @@ class CustomARView: UIViewController, ARSessionDelegate {
     }
     
 
+}
+
+
+extension CGImagePropertyOrientation {
+    /// Preferred image presentation orientation respecting the native sensor orientation of iOS device camera.
+    init(cameraOrientation: UIDeviceOrientation) {
+        switch cameraOrientation {
+        case .portrait:
+            self = .right
+        case .portraitUpsideDown:
+            self = .left
+        case .landscapeLeft:
+            self = .up
+        case .landscapeRight:
+            self = .down
+        default:
+            self = .right
+        }
+    }
+}
+
+
+extension ARWorldMap {
+    var snapshotAnchor: SnapshotAnchor? {
+        return anchors.compactMap { $0 as? SnapshotAnchor }.first
+    }
 }
