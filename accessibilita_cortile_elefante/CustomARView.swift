@@ -15,6 +15,23 @@ class CustomARView: UIViewController, ARSessionDelegate {
     
     @IBOutlet weak var salvaButton: UIButton!
     
+    private var models: [Model] = {
+        let filemanager = FileManager.default
+        
+        guard let path = Bundle.main.resourcePath, let files = try? filemanager.contentsOfDirectory(atPath: path) else {
+            return []
+        }
+        
+        var availableModels: [Model] = []
+        for filename in files where
+            filename.hasSuffix("usdz"){
+            let modelName = filename.replacingOccurrences(of: ".usdz", with: "")
+            let model = Model(modelName: modelName)
+            availableModels.append(model)
+        }
+        
+        return availableModels
+    } ()
     
     var defaultConfiguration: ARWorldTrackingConfiguration {
             let configuration = ARWorldTrackingConfiguration()
@@ -58,20 +75,29 @@ class CustomARView: UIViewController, ARSessionDelegate {
         let configuration = self.defaultConfiguration // this app's standard world tracking settings
         configuration.initialWorldMap = worldMap
         self.arView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
+        
+        var count = 0
+        
+        for anchor in worldMap!.anchors {
+            print("anchor #\(count)")
+            if let _ = anchor as? CustomARAnchor {
+                print("DEBUG: esiste custom anchor")
+            }
+            count = count + 1
+        }
     }
         
    
     func addAnchorEntityToScene(anchor: ARAnchor) {
-        guard let arAnchor = anchor as? CustomARAnchor else {return}
-        let anchorEntity = AnchorEntity(anchor: arAnchor)
+        let anchorEntity = AnchorEntity(anchor: anchor)
         switch anchor.name {
             case "biplane":
+                guard let arAnchor = anchor as? CustomARAnchor else {return}
+                let anchorEntity = AnchorEntity(anchor: arAnchor)
                 let toyBiplaneEntity = try! ModelEntity.loadModel(named: "toy_biplane")
                 anchorEntity.addChild(toyBiplaneEntity)
                 self.arView.scene.anchors.append(anchorEntity)
-                toyBiplaneEntity.scale = arAnchor.modelScale!
-                toyBiplaneEntity.orientation = arAnchor.modelOrientation!
-                toyBiplaneEntity.position = arAnchor.modelPosition!
+                toyBiplaneEntity.scale = SIMD3.init(arAnchor.modelScalex, arAnchor.modelScaley, arAnchor.modelScalez)
                 break
             case "greenSquare":
                 let planeMesh = MeshResource.generatePlane(width: 0.3, depth: 0.3)
@@ -110,6 +136,9 @@ class CustomARView: UIViewController, ARSessionDelegate {
         print("did add anchor: \(anchors.count) anchors in total")
             
         for anchor in anchors {
+            if let _ = anchor as? CustomARAnchor {
+                print("DEBUG: trovata custom anchor")
+            }
             addAnchorEntityToScene(anchor: anchor)
         }
     }
