@@ -19,6 +19,25 @@ class CustomARView: UIViewController, ARSessionDelegate {
     
     private var actualObject: String = ""
     
+    private var models: [Model] = {
+        let filemanager = FileManager.default
+        
+        guard let path = Bundle.main.resourcePath, let files = try? filemanager.contentsOfDirectory(atPath: path) else {
+            return []
+        }
+        
+        var availableModels: [Model] = []
+        for filename in files where
+            filename.hasSuffix("usdz"){
+            let modelName = filename.replacingOccurrences(of: ".usdz", with: "")
+            let model = Model(modelName: modelName)
+            availableModels.append(model)
+        }
+        
+        return availableModels
+    } ()
+    
+    
     var defaultConfiguration: ARWorldTrackingConfiguration {
             let configuration = ARWorldTrackingConfiguration()
             configuration.planeDetection = .horizontal
@@ -161,7 +180,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
         
         switch actualObject {
         case "biplane":
-            let biplaneModel = try! ModelEntity.loadModel(named: "toy_biplane")
+            let biplaneModel = models[0].modelEntity!
             anchorEntity.addChild(biplaneModel)
             installGestures(on: biplaneModel)
             break
