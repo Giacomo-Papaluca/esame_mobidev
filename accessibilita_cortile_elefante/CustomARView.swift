@@ -155,6 +155,10 @@ class CustomARView: UIViewController, ARSessionDelegate {
                 return
             }
             
+            guard let snapshotAnchor = SnapshotAnchor(capturing: self.arView)
+                else { fatalError("Can't take snapshot") }
+            map.anchors.append(snapshotAnchor)
+            
             do {
                 let data = try NSKeyedArchiver.archivedData(withRootObject: map, requiringSecureCoding: true)
                 try data.write(to: URL(fileURLWithPath: self.worldMapFilePath), options: [.atomic])
@@ -239,6 +243,8 @@ class CustomARView: UIViewController, ARSessionDelegate {
 
 }
 
+// MARK: -EXTENSIONS
+
 extension ARFrame.WorldMappingStatus: CustomStringConvertible {
     public var description: String {
         switch self {
@@ -256,3 +262,26 @@ extension ARFrame.WorldMappingStatus: CustomStringConvertible {
     }
 }
 
+extension CGImagePropertyOrientation {
+    /// Preferred image presentation orientation respecting the native sensor orientation of iOS device camera.
+    init(cameraOrientation: UIDeviceOrientation) {
+        switch cameraOrientation {
+        case .portrait:
+            self = .right
+        case .portraitUpsideDown:
+            self = .left
+        case .landscapeLeft:
+            self = .up
+        case .landscapeRight:
+            self = .down
+        default:
+            self = .right
+        }
+    }
+}
+
+extension ARWorldMap {
+    var snapshotAnchor: SnapshotAnchor? {
+        return anchors.compactMap { $0 as? SnapshotAnchor }.first
+    }
+}
