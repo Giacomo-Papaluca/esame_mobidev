@@ -152,6 +152,10 @@ class CustomARView: UIViewController, ARSessionDelegate {
         }
     }
     
+    /*func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
+        self.snapshotThumbnail.isHidden = true
+    }*/
+    
 
 }
 
