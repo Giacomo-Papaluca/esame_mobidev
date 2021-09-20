@@ -87,6 +87,16 @@ class CustomARView: UIViewController, ARSessionDelegate {
         }*/
         
     }
+    
+    private func modelScaleToSIMD3(scale str: String) -> SIMD3<Float>{
+        let suffix = str.suffix(from: str.index(str.startIndex, offsetBy: 13))
+        var values = suffix.split(separator: ",")
+        values[2].removeLast()
+        values[2].removeFirst()
+        values[1].removeFirst()
+        for test in values { print(test)}
+        return SIMD3(Float(values[0])!, Float(values[1])!, Float(values[2])!)
+    }
         
    
     func addAnchorEntityToScene(anchor: ARAnchor) {
@@ -94,12 +104,12 @@ class CustomARView: UIViewController, ARSessionDelegate {
             print("DEBUG: ATTENZIONE! anchora non è custom")
             return
         }
-        print("anchor: " + anchor.name! + "; scale: \(SIMD3(Float(anchor.modelScalex)!, Float(anchor.modelScaley)!, Float(anchor.modelScalez)!))")
+        print("anchor: " + anchor.name! + "; scale: " + anchor.modelScale)
         let anchorEntity = AnchorEntity(anchor: anchor)
         switch anchor.name {
             case "biplane":
                 let toyBiplaneEntity = models[0].modelEntity!
-                toyBiplaneEntity.transform.scale = SIMD3(Float(anchor.modelScalex)!, Float(anchor.modelScaley)!, Float(anchor.modelScalez)!)
+                toyBiplaneEntity.transform.scale = modelScaleToSIMD3(scale: anchor.modelScale)
                 anchorEntity.addChild(toyBiplaneEntity)
                 self.arView.scene.anchors.append(anchorEntity)
                 break
@@ -108,7 +118,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
                 var planeMaterial = UnlitMaterial()
                 planeMaterial.baseColor = MaterialColorParameter.color(.green.withAlphaComponent(0.7))
                 let planeModel = ModelEntity(mesh: planeMesh, materials: [planeMaterial])
-                planeModel.transform.scale = SIMD3(Float(anchor.modelScalex)!, Float(anchor.modelScaley)!, Float(anchor.modelScalez)!)
+                planeModel.transform.scale = modelScaleToSIMD3(scale: anchor.modelScale)
                 anchorEntity.addChild(planeModel)
                 self.arView.scene.anchors.append(anchorEntity)
                 break
@@ -117,7 +127,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
                 var planeMaterial = UnlitMaterial()
                 planeMaterial.baseColor = MaterialColorParameter.color(.red.withAlphaComponent(0.7))
                 let planeModel = ModelEntity(mesh: planeMesh, materials: [planeMaterial])
-                planeModel.transform.scale = SIMD3(Float(anchor.modelScalex)!, Float(anchor.modelScaley)!, Float(anchor.modelScalez)!)
+                planeModel.transform.scale = modelScaleToSIMD3(scale: anchor.modelScale)
                 anchorEntity.addChild(planeModel)
                 self.arView.scene.anchors.append(anchorEntity)
                 break
