@@ -163,6 +163,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
                 let anchor = map.anchors.first(where: {$0.identifier == couple.key}) as! CustomARAnchor
                 anchor.modelScale = model.transform.scale.description
                 anchor.modelRotation = model.transform.rotation.debugDescription
+                anchor.modelPosition = model.transform.translation.description
             }
             
             
