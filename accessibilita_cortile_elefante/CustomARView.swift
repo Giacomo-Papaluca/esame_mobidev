@@ -99,7 +99,8 @@ class CustomARView: UIViewController, ARSessionDelegate {
         switch anchor.name {
             case "biplane":
                 let toyBiplaneEntity = models[0].modelEntity!
-                toyBiplaneEntity.transform.scale = modelScaleToSIMD3(scale: anchor.modelScale)
+                toyBiplaneEntity.transform.scale = stringToSIMD3(scale: anchor.modelScale)
+                toyBiplaneEntity.transform.translation = stringToSIMD3(scale: anchor.modelPosition)
                 toyBiplaneEntity.transform.rotation = modelRotationToSimd_quatf(rotation: anchor.modelRotation)
                 anchorEntity.addChild(toyBiplaneEntity)
                 self.arView.scene.anchors.append(anchorEntity)
@@ -109,7 +110,8 @@ class CustomARView: UIViewController, ARSessionDelegate {
                 var planeMaterial = UnlitMaterial()
                 planeMaterial.baseColor = MaterialColorParameter.color(.green.withAlphaComponent(0.7))
                 let planeModel = ModelEntity(mesh: planeMesh, materials: [planeMaterial])
-                planeModel.transform.scale = modelScaleToSIMD3(scale: anchor.modelScale)
+                planeModel.transform.scale = stringToSIMD3(scale: anchor.modelScale)
+                planeModel.transform.translation = stringToSIMD3(scale: anchor.modelPosition)
                 planeModel.transform.rotation = modelRotationToSimd_quatf(rotation: anchor.modelRotation)
                 anchorEntity.addChild(planeModel)
                 self.arView.scene.anchors.append(anchorEntity)
@@ -119,7 +121,8 @@ class CustomARView: UIViewController, ARSessionDelegate {
                 var planeMaterial = UnlitMaterial()
                 planeMaterial.baseColor = MaterialColorParameter.color(.red.withAlphaComponent(0.7))
                 let planeModel = ModelEntity(mesh: planeMesh, materials: [planeMaterial])
-                planeModel.transform.scale = modelScaleToSIMD3(scale: anchor.modelScale)
+                planeModel.transform.scale = stringToSIMD3(scale: anchor.modelScale)
+                planeModel.transform.translation = stringToSIMD3(scale: anchor.modelPosition)
                 planeModel.transform.rotation = modelRotationToSimd_quatf(rotation: anchor.modelRotation)
                 anchorEntity.addChild(planeModel)
                 self.arView.scene.anchors.append(anchorEntity)
@@ -131,7 +134,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
     
     // MARK: -Parsing custom anchor properties
         
-    private func modelScaleToSIMD3(scale str: String) -> SIMD3<Float>{
+    private func stringToSIMD3(scale str: String) -> SIMD3<Float>{
         let suffix = str.suffix(from: str.index(str.startIndex, offsetBy: 13))
         var values = suffix.split(separator: ",")
         values[2].removeLast()
