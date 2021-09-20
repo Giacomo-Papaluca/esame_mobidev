@@ -19,6 +19,8 @@ class CustomARView: UIViewController, ARSessionDelegate {
     
     private var actualObject: String = ""
     
+    private var anchorOgbjectMapping: [UUID:ModelEntity] = [:]
+    
     private var models: [Model] = {
         let filemanager = FileManager.default
         
@@ -155,15 +157,26 @@ class CustomARView: UIViewController, ARSessionDelegate {
                 return
             }
             
-            guard let snapshotAnchor = SnapshotAnchor(capturing: self.arView)
-                else { fatalError("Can't take snapshot") }
-            map.anchors.append(snapshotAnchor)
+            for couple in self.anchorOgbjectMapping {
+                print(couple)
+                let scale = couple.value.transform.scale
+                let anchor = map.anchors.first(where: {$0.identifier == couple.key}) as! CustomARAnchor
+                anchor.modelScalex = (String) (scale.x)
+                anchor.modelScaley = (String) (scale.y)
+                anchor.modelScalez = (String) (scale.z)
+            }
+            
             
             do {
                 let data = try NSKeyedArchiver.archivedData(withRootObject: map, requiringSecureCoding: true)
                 try data.write(to: URL(fileURLWithPath: self.worldMapFilePath), options: [.atomic])
             } catch {
                 fatalError("Can't save map: \(error.localizedDescription)")
+            }
+            for test in map.anchors {
+                if let anchor = test as? CustomARAnchor {
+                    print("anchor: " + anchor.name! + "; scale: \(SIMD3(Float(anchor.modelScalex)!, Float(anchor.modelScaley)!, Float(anchor.modelScalez)!))")
+                }
             }
         }
     }
@@ -178,35 +191,57 @@ class CustomARView: UIViewController, ARSessionDelegate {
             return
         }
         
-        let arAnchor = ARAnchor(name: actualObject, transform: result.worldTransform)
-        self.arView.session.add(anchor: arAnchor)
-        let anchorEntity = AnchorEntity(anchor: arAnchor)
-        
         switch actualObject {
         case "biplane":
             let biplaneModel = models[0].modelEntity!
+            
+            let arAnchor = CustomARAnchor(name: actualObject, transform: result.worldTransform, modelScale: biplaneModel.transform.scale)
+            self.arView.session.add(anchor: arAnchor)
+            let anchorEntity = AnchorEntity(anchor: arAnchor)
+            
             anchorEntity.addChild(biplaneModel)
             installGestures(on: biplaneModel)
+            
+            self.arView.scene.addAnchor(anchorEntity)
+            self.anchorOgbjectMapping[arAnchor.identifier] = biplaneModel
             break
         case "greenSquare":
+            
             let planeMesh = MeshResource.generatePlane(width: 0.3, depth: 0.3)
             var planeMaterial = SimpleMaterial()
             planeMaterial.baseColor = MaterialColorParameter.color(.green.withAlphaComponent(0.7))
             let planeModel = ModelEntity(mesh: planeMesh, materials: [planeMaterial])
+            
+            let arAnchor = CustomARAnchor(name: actualObject, transform: result.worldTransform, modelScale: planeModel.transform.scale)
+            self.arView.session.add(anchor: arAnchor)
+            let anchorEntity = AnchorEntity(anchor: arAnchor)
+            
             anchorEntity.addChild(planeModel)
+            installGestures(on: planeModel)
+            
+            self.arView.scene.addAnchor(anchorEntity)
+            self.anchorOgbjectMapping[arAnchor.identifier] = planeModel
             break
         case "redSquare":
             let planeMesh = MeshResource.generatePlane(width: 0.3, depth: 0.3)
             var planeMaterial = SimpleMaterial()
             planeMaterial.baseColor = MaterialColorParameter.color(.red.withAlphaComponent(0.7))
             let planeModel = ModelEntity(mesh: planeMesh, materials: [planeMaterial])
+            
+            let arAnchor = CustomARAnchor(name: actualObject, transform: result.worldTransform, modelScale: planeModel.transform.scale)
+            self.arView.session.add(anchor: arAnchor)
+            let anchorEntity = AnchorEntity(anchor: arAnchor)
+            
             anchorEntity.addChild(planeModel)
+            installGestures(on: planeModel)
+            
+            self.arView.scene.addAnchor(anchorEntity)
+            self.anchorOgbjectMapping[arAnchor.identifier] = planeModel
             break
         default:
             return
         }
         
-        self.arView.scene.addAnchor(anchorEntity)
     }
     
     func installGestures(on object:ModelEntity){
@@ -231,9 +266,11 @@ class CustomARView: UIViewController, ARSessionDelegate {
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
         if frame.worldMappingStatus == .extending || frame.worldMappingStatus == .mapped {
             salvaButton.isEnabled=true
+            salvaButton.isHidden=false
         }
         else {
             salvaButton.isEnabled=false
+            salvaButton.isHidden=true
         }
         statusLabel.text = """
         Mapping: \(frame.worldMappingStatus.description)
@@ -242,8 +279,6 @@ class CustomARView: UIViewController, ARSessionDelegate {
     
 
 }
-
-// MARK: -EXTENSIONS
 
 extension ARFrame.WorldMappingStatus: CustomStringConvertible {
     public var description: String {
@@ -259,29 +294,5 @@ extension ARFrame.WorldMappingStatus: CustomStringConvertible {
         @unknown default:
             return "Unknown"
         }
-    }
-}
-
-extension CGImagePropertyOrientation {
-    /// Preferred image presentation orientation respecting the native sensor orientation of iOS device camera.
-    init(cameraOrientation: UIDeviceOrientation) {
-        switch cameraOrientation {
-        case .portrait:
-            self = .right
-        case .portraitUpsideDown:
-            self = .left
-        case .landscapeLeft:
-            self = .up
-        case .landscapeRight:
-            self = .down
-        default:
-            self = .right
-        }
-    }
-}
-
-extension ARWorldMap {
-    var snapshotAnchor: SnapshotAnchor? {
-        return anchors.compactMap { $0 as? SnapshotAnchor }.first
     }
 }
