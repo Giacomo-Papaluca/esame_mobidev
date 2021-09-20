@@ -159,9 +159,10 @@ class CustomARView: UIViewController, ARSessionDelegate {
             
             for couple in self.anchorOgbjectMapping {
                 print(couple)
-                let scale = couple.value.transform.scale
+                let model = couple.value
                 let anchor = map.anchors.first(where: {$0.identifier == couple.key}) as! CustomARAnchor
-                anchor.modelScale = scale.description
+                anchor.modelScale = model.transform.scale.description
+                anchor.modelRotation = model.transform.rotation.debugDescription
             }
             
             
@@ -174,9 +175,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
             for test in map.anchors {
                 if let anchor = test as? CustomARAnchor {
                     let str = anchor.modelScale.description
-                    let suffix = str.suffix(from: str.index(str.startIndex, offsetBy: 13))
-                    let values = suffix.split(separator: ",")
-                    print("anchor: " + anchor.name! + "; scale: \(str) 1st float: \(values[0])")
+                    print("anchor: " + anchor.name! + "; scale: \(str)")
                 }
             }
         }
