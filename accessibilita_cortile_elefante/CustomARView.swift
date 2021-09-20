@@ -10,9 +10,7 @@ import RealityKit
 import ARKit
 
 class CustomARView: UIViewController, ARSessionDelegate {
-    
-    @IBOutlet weak var snapshotThumbnail: UIImageView!
-    
+
     @IBOutlet weak var arView: ARView!
     
     @IBOutlet weak var salvaButton: UIButton!
@@ -74,21 +72,11 @@ class CustomARView: UIViewController, ARSessionDelegate {
           
         let worldMap = try! NSKeyedUnarchiver.unarchivedObject(ofClass: ARWorldMap.self, from: mapData)
         
-        
-        if let snapshotData = worldMap!.snapshotAnchor?.imageData,
-            let snapshot = UIImage(data: snapshotData) {
-            self.snapshotThumbnail.image = snapshot
-        } else {
-            print("No snapshot image in world map")
-        }
-        // Remove the snapshot anchor from the world map since we do not need it in the scene.
-        worldMap!.anchors.removeAll(where: {$0 is SnapshotAnchor})
-        
         let configuration = self.defaultConfiguration // this app's standard world tracking settings
         configuration.initialWorldMap = worldMap
         self.arView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
         
-        var count = 0
+        /*var count = 0
         
         for anchor in worldMap!.anchors {
             print("anchor #\(count)")
@@ -96,15 +84,22 @@ class CustomARView: UIViewController, ARSessionDelegate {
                 print("DEBUG: esiste custom anchor")
             }
             count = count + 1
-        }
+        }*/
+        
     }
         
    
     func addAnchorEntityToScene(anchor: ARAnchor) {
+        guard let anchor = anchor as? CustomARAnchor else {
+            print("DEBUG: ATTENZIONE! anchora non è custom")
+            return
+        }
+        print("anchor: " + anchor.name! + "; scale: \(SIMD3(Float(anchor.modelScalex)!, Float(anchor.modelScaley)!, Float(anchor.modelScalez)!))")
         let anchorEntity = AnchorEntity(anchor: anchor)
         switch anchor.name {
             case "biplane":
                 let toyBiplaneEntity = models[0].modelEntity!
+                toyBiplaneEntity.transform.scale = SIMD3(Float(anchor.modelScalex)!, Float(anchor.modelScaley)!, Float(anchor.modelScalez)!)
                 anchorEntity.addChild(toyBiplaneEntity)
                 self.arView.scene.anchors.append(anchorEntity)
                 break
@@ -113,6 +108,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
                 var planeMaterial = UnlitMaterial()
                 planeMaterial.baseColor = MaterialColorParameter.color(.green.withAlphaComponent(0.7))
                 let planeModel = ModelEntity(mesh: planeMesh, materials: [planeMaterial])
+                planeModel.transform.scale = SIMD3(Float(anchor.modelScalex)!, Float(anchor.modelScaley)!, Float(anchor.modelScalez)!)
                 anchorEntity.addChild(planeModel)
                 self.arView.scene.anchors.append(anchorEntity)
                 break
@@ -121,6 +117,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
                 var planeMaterial = UnlitMaterial()
                 planeMaterial.baseColor = MaterialColorParameter.color(.red.withAlphaComponent(0.7))
                 let planeModel = ModelEntity(mesh: planeMesh, materials: [planeMaterial])
+                planeModel.transform.scale = SIMD3(Float(anchor.modelScalex)!, Float(anchor.modelScaley)!, Float(anchor.modelScalez)!)
                 anchorEntity.addChild(planeModel)
                 self.arView.scene.anchors.append(anchorEntity)
                 break
@@ -145,6 +142,11 @@ class CustomARView: UIViewController, ARSessionDelegate {
         print("did add anchor: \(anchors.count) anchors in total")
             
         for anchor in anchors {
+            
+            if let name = anchor.name {
+                print("DEBUG: anchora" + name)
+            }
+            
             if let _ = anchor as? CustomARAnchor {
                 print("DEBUG: trovata custom anchor")
             }
@@ -152,35 +154,6 @@ class CustomARView: UIViewController, ARSessionDelegate {
         }
     }
     
-    /*func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
-        self.snapshotThumbnail.isHidden = true
-    }*/
-    
 
 }
 
-
-extension CGImagePropertyOrientation {
-    /// Preferred image presentation orientation respecting the native sensor orientation of iOS device camera.
-    init(cameraOrientation: UIDeviceOrientation) {
-        switch cameraOrientation {
-        case .portrait:
-            self = .right
-        case .portraitUpsideDown:
-            self = .left
-        case .landscapeLeft:
-            self = .up
-        case .landscapeRight:
-            self = .down
-        default:
-            self = .right
-        }
-    }
-}
-
-
-extension ARWorldMap {
-    var snapshotAnchor: SnapshotAnchor? {
-        return anchors.compactMap { $0 as? SnapshotAnchor }.first
-    }
-}

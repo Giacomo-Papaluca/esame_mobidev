@@ -10,20 +10,15 @@ import RealityKit
 
 class CustomARAnchor: ARAnchor {
     
-    var modelScalex: Float
-    var modelScaley: Float
-    var modelScalez: Float
-    
-    /*override init(name: String, transform: simd_float4x4) {
-        self.modelTransform = Transform()
-        super.init(name: name, transform: transform)
-    }*/
+    var modelScalex: String
+    var modelScaley: String
+    var modelScalez: String
     
 
     init(name: String, transform: float4x4, modelScale: SIMD3<Float>) {
-        self.modelScalex = modelScale.x
-        self.modelScaley = modelScale.y
-        self.modelScalez = modelScale.z
+        self.modelScalex = (String) (modelScale.x)
+        self.modelScaley = (String) (modelScale.y)
+        self.modelScalez = (String) (modelScale.z)
         super.init(name: name, transform: transform)
     }
 
@@ -42,7 +37,7 @@ class CustomARAnchor: ARAnchor {
 
 
     required init?(coder aDecoder: NSCoder) {
-        if let modelScalex = aDecoder.decodeObject(forKey: "modelScalex") as? Float, let modelScaley = aDecoder.decodeObject(forKey: "modelScaley") as? Float, let modelScalez = aDecoder.decodeObject(forKey: "modelScalez") as? Float {
+        if let modelScalex = aDecoder.decodeObject(forKey: "modelScalex") as? String, let modelScaley = aDecoder.decodeObject(forKey: "modelScaley") as? String, let modelScalez = aDecoder.decodeObject(forKey: "modelScalez") as? String {
             self.modelScalex = modelScalex
             self.modelScaley = modelScaley
             self.modelScalez = modelScalez
