@@ -161,9 +161,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
                 print(couple)
                 let scale = couple.value.transform.scale
                 let anchor = map.anchors.first(where: {$0.identifier == couple.key}) as! CustomARAnchor
-                anchor.modelScalex = (String) (scale.x)
-                anchor.modelScaley = (String) (scale.y)
-                anchor.modelScalez = (String) (scale.z)
+                anchor.modelScale = scale.description
             }
             
             
@@ -175,7 +173,10 @@ class CustomARView: UIViewController, ARSessionDelegate {
             }
             for test in map.anchors {
                 if let anchor = test as? CustomARAnchor {
-                    print("anchor: " + anchor.name! + "; scale: \(SIMD3(Float(anchor.modelScalex)!, Float(anchor.modelScaley)!, Float(anchor.modelScalez)!))")
+                    let str = anchor.modelScale.description
+                    let suffix = str.suffix(from: str.index(str.startIndex, offsetBy: 13))
+                    let values = suffix.split(separator: ",")
+                    print("anchor: " + anchor.name! + "; scale: \(str) 1st float: \(values[0])")
                 }
             }
         }
