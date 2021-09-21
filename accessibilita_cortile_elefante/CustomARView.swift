@@ -200,7 +200,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
         
         switch actualObject {
         case "biplane":
-            let biplaneModel = models[2].modelEntity!
+            let biplaneModel = models.first(where: {$0.modelName == "toy_biplane"})!.modelEntity!
             
             let arAnchor = CustomARAnchor(name: actualObject, transform: result.worldTransform, modelScale: biplaneModel.transform.scale)
             self.arView.session.add(anchor: arAnchor)
@@ -213,7 +213,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
             self.anchorOgbjectMapping[arAnchor.identifier] = biplaneModel
             break
         case "arrow":
-            let arrowModel = models[1].modelEntity!.clone(recursive: true)
+            let arrowModel = models.first(where: {$0.modelName == "myArrow"})!.modelEntity!.clone(recursive: true)
             
             let arAnchor = CustomARAnchor(name: actualObject, transform: result.worldTransform, modelScale: arrowModel.transform.scale)
             self.arView.session.add(anchor: arAnchor)
@@ -259,7 +259,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
             self.anchorOgbjectMapping[arAnchor.identifier] = planeModel
             break
         case "dangerLine":
-            let dangerModel = models[0].modelEntity!.clone(recursive: true)
+            let dangerModel = models.first(where: {$0.modelName == "dangerLine"})!.modelEntity!.clone(recursive: true)
             
             let arAnchor = CustomARAnchor(name: actualObject, transform: result.worldTransform, modelScale: dangerModel.transform.scale)
             self.arView.session.add(anchor: arAnchor)
