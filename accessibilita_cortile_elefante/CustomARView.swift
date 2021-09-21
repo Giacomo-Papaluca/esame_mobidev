@@ -35,7 +35,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
     
     var defaultConfiguration: ARWorldTrackingConfiguration {
             let configuration = ARWorldTrackingConfiguration()
-            configuration.planeDetection = .horizontal
+        configuration.planeDetection = [.horizontal, .vertical]
             configuration.environmentTexturing = .automatic
             if ARWorldTrackingConfiguration.supportsSceneReconstruction(.mesh) {
                 configuration.sceneReconstruction = .mesh
@@ -74,32 +74,41 @@ class CustomARView: UIViewController, ARSessionDelegate {
         
         let configuration = self.defaultConfiguration // this app's standard world tracking settings
         configuration.initialWorldMap = worldMap
+        guard let referenceImages = ARReferenceImage.referenceImages(inGroupNamed: "ImageToDetect", bundle: nil) else {
+            fatalError("immagini non trovate")
+        }
+        configuration.detectionImages = referenceImages
         self.arView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
         
-        /*var count = 0
-        
-        for anchor in worldMap!.anchors {
-            print("anchor #\(count)")
-            if let _ = anchor as? CustomARAnchor {
-                print("DEBUG: esiste custom anchor")
-            }
-            count = count + 1
-        }*/
         
     }
     
    
     func addAnchorEntityToScene(anchor: ARAnchor) {
+        let anchorEntity = AnchorEntity(anchor: anchor)
+        
+        if let _ = anchor as? ARImageAnchor {
+            print("image found")
+            let gioconda = models[0].modelEntity!
+            anchorEntity.addChild(gioconda)
+        }
+        
         if let anchor = anchor as? CustomARAnchor {
             print("anchor: " + anchor.name! + "; scale: " + anchor.modelScale)
-            let anchorEntity = AnchorEntity(anchor: anchor)
             switch anchor.name {
                 case "biplane":
-                    let toyBiplaneEntity = models[0].modelEntity!
+                    let toyBiplaneEntity = models[2].modelEntity!
                     toyBiplaneEntity.transform.scale = stringToSIMD3(scale: anchor.modelScale)
                     toyBiplaneEntity.transform.translation = stringToSIMD3(scale: anchor.modelPosition)
                     toyBiplaneEntity.transform.rotation = modelRotationToSimd_quatf(rotation: anchor.modelRotation)
                     anchorEntity.addChild(toyBiplaneEntity)
+                    break
+                case "arrow":
+                    let arrowEntity = models[1].modelEntity!.clone(recursive: true)
+                    arrowEntity.transform.scale = stringToSIMD3(scale: anchor.modelScale)
+                    arrowEntity.transform.translation = stringToSIMD3(scale: anchor.modelPosition)
+                    arrowEntity.transform.rotation = modelRotationToSimd_quatf(rotation: anchor.modelRotation)
+                    anchorEntity.addChild(arrowEntity)
                     break
                 case "greenSquare":
                     let planeMesh = MeshResource.generatePlane(width: 0.3, depth: 0.3)
@@ -124,8 +133,9 @@ class CustomARView: UIViewController, ARSessionDelegate {
                 default:
                     return
             }
-            self.arView.scene.anchors.append(anchorEntity)
         }
+        
+        self.arView.scene.anchors.append(anchorEntity)
     }
     
     // MARK: -Parsing custom anchor properties
@@ -170,7 +180,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
         for anchor in anchors {
             
             if let name = anchor.name {
-                print("DEBUG: anchora" + name)
+                print("DEBUG: anchora " + name)
             }
             
             if let _ = anchor as? CustomARAnchor {

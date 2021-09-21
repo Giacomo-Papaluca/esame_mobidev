@@ -18,6 +18,9 @@
 		2413AD8C26CD66EA00D7DBA8 /* accessibilita_cortile_elefanteUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2413AD8B26CD66EA00D7DBA8 /* accessibilita_cortile_elefanteUITests.swift */; };
 		2417588A26E9FBD0007F387E /* toy_biplane.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 2417588926E9FBD0007F387E /* toy_biplane.usdz */; };
 		2419C43126F0A2C3002BCD58 /* CustomARAnchor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2419C43026F0A2C3002BCD58 /* CustomARAnchor.swift */; };
+		24765A4226F9FEB000297D47 /* gioconda.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 24765A4126F9FEB000297D47 /* gioconda.usdz */; };
+		24765A4626FA024B00297D47 /* myArrow.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 24765A4526FA024B00297D47 /* myArrow.usdz */; };
+		24765A4A26FA055F00297D47 /* WorldMap in Resources */ = {isa = PBXBuildFile; fileRef = 24765A4926FA055F00297D47 /* WorldMap */; };
 		2495326026F3361500715F55 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2495325F26F3361500715F55 /* Model.swift */; };
 /* End PBXBuildFile section */
 
@@ -56,6 +59,10 @@
 		2413AD8D26CD66EA00D7DBA8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2417588926E9FBD0007F387E /* toy_biplane.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = toy_biplane.usdz; sourceTree = "<group>"; };
 		2419C43026F0A2C3002BCD58 /* CustomARAnchor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomARAnchor.swift; sourceTree = "<group>"; };
+		24765A3E26F9FC3000297D47 /* gioconda.rcproject */ = {isa = PBXFileReference; lastKnownFileType = file.rcproject; path = gioconda.rcproject; sourceTree = "<group>"; };
+		24765A4126F9FEB000297D47 /* gioconda.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; name = gioconda.usdz; path = ../../../../gioconda.usdz; sourceTree = "<group>"; };
+		24765A4526FA024B00297D47 /* myArrow.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = myArrow.usdz; sourceTree = "<group>"; };
+		24765A4926FA055F00297D47 /* WorldMap */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; name = WorldMap; path = ../../../../Desktop/WorldMap; sourceTree = "<group>"; };
 		2495325F26F3361500715F55 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -107,10 +114,12 @@
 		2413AD6826CD66E900D7DBA8 /* accessibilita_cortile_elefante */ = {
 			isa = PBXGroup;
 			children = (
+				24765A4926FA055F00297D47 /* WorldMap */,
 				2417588826E9FBA3007F387E /* Models */,
 				2413AD6926CD66E900D7DBA8 /* AppDelegate.swift */,
 				2413AD6B26CD66E900D7DBA8 /* ContentView.swift */,
 				24117F9626E7B22E0009005B /* CustomARView.swift */,
+				24765A3E26F9FC3000297D47 /* gioconda.rcproject */,
 				2495325F26F3361500715F55 /* Model.swift */,
 				2419C43026F0A2C3002BCD58 /* CustomARAnchor.swift */,
 				24117F9726E7B22E0009005B /* CustomARView.xib */,
@@ -152,6 +161,8 @@
 			isa = PBXGroup;
 			children = (
 				2417588926E9FBD0007F387E /* toy_biplane.usdz */,
+				24765A4126F9FEB000297D47 /* gioconda.usdz */,
+				24765A4526FA024B00297D47 /* myArrow.usdz */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -259,8 +270,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				24765A4A26FA055F00297D47 /* WorldMap in Resources */,
 				2413AD7326CD66EA00D7DBA8 /* Preview Assets.xcassets in Resources */,
 				24117F9926E7B22E0009005B /* CustomARView.xib in Resources */,
+				24765A4226F9FEB000297D47 /* gioconda.usdz in Resources */,
+				24765A4626FA024B00297D47 /* myArrow.usdz in Resources */,
 				2417588A26E9FBD0007F387E /* toy_biplane.usdz in Resources */,
 				2413AD7026CD66EA00D7DBA8 /* Assets.xcassets in Resources */,
 			);
