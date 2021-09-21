@@ -90,45 +90,41 @@ class CustomARView: UIViewController, ARSessionDelegate {
     
    
     func addAnchorEntityToScene(anchor: ARAnchor) {
-        guard let anchor = anchor as? CustomARAnchor else {
-            print("DEBUG: ATTENZIONE! anchora non è custom")
-            return
-        }
-        print("anchor: " + anchor.name! + "; scale: " + anchor.modelScale)
-        let anchorEntity = AnchorEntity(anchor: anchor)
-        switch anchor.name {
-            case "biplane":
-                let toyBiplaneEntity = models[0].modelEntity!
-                toyBiplaneEntity.transform.scale = stringToSIMD3(scale: anchor.modelScale)
-                toyBiplaneEntity.transform.translation = stringToSIMD3(scale: anchor.modelPosition)
-                toyBiplaneEntity.transform.rotation = modelRotationToSimd_quatf(rotation: anchor.modelRotation)
-                anchorEntity.addChild(toyBiplaneEntity)
-                self.arView.scene.anchors.append(anchorEntity)
-                break
-            case "greenSquare":
-                let planeMesh = MeshResource.generatePlane(width: 0.3, depth: 0.3)
-                var planeMaterial = UnlitMaterial()
-                planeMaterial.baseColor = MaterialColorParameter.color(.green.withAlphaComponent(0.7))
-                let planeModel = ModelEntity(mesh: planeMesh, materials: [planeMaterial])
-                planeModel.transform.scale = stringToSIMD3(scale: anchor.modelScale)
-                planeModel.transform.translation = stringToSIMD3(scale: anchor.modelPosition)
-                planeModel.transform.rotation = modelRotationToSimd_quatf(rotation: anchor.modelRotation)
-                anchorEntity.addChild(planeModel)
-                self.arView.scene.anchors.append(anchorEntity)
-                break
-            case "redSquare":
-                let planeMesh = MeshResource.generatePlane(width: 0.3, depth: 0.3)
-                var planeMaterial = UnlitMaterial()
-                planeMaterial.baseColor = MaterialColorParameter.color(.red.withAlphaComponent(0.7))
-                let planeModel = ModelEntity(mesh: planeMesh, materials: [planeMaterial])
-                planeModel.transform.scale = stringToSIMD3(scale: anchor.modelScale)
-                planeModel.transform.translation = stringToSIMD3(scale: anchor.modelPosition)
-                planeModel.transform.rotation = modelRotationToSimd_quatf(rotation: anchor.modelRotation)
-                anchorEntity.addChild(planeModel)
-                self.arView.scene.anchors.append(anchorEntity)
-                break
-            default:
-                return
+        if let anchor = anchor as? CustomARAnchor {
+            print("anchor: " + anchor.name! + "; scale: " + anchor.modelScale)
+            let anchorEntity = AnchorEntity(anchor: anchor)
+            switch anchor.name {
+                case "biplane":
+                    let toyBiplaneEntity = models[0].modelEntity!
+                    toyBiplaneEntity.transform.scale = stringToSIMD3(scale: anchor.modelScale)
+                    toyBiplaneEntity.transform.translation = stringToSIMD3(scale: anchor.modelPosition)
+                    toyBiplaneEntity.transform.rotation = modelRotationToSimd_quatf(rotation: anchor.modelRotation)
+                    anchorEntity.addChild(toyBiplaneEntity)
+                    break
+                case "greenSquare":
+                    let planeMesh = MeshResource.generatePlane(width: 0.3, depth: 0.3)
+                    var planeMaterial = UnlitMaterial()
+                    planeMaterial.baseColor = MaterialColorParameter.color(.green.withAlphaComponent(0.7))
+                    let planeModel = ModelEntity(mesh: planeMesh, materials: [planeMaterial])
+                    planeModel.transform.scale = stringToSIMD3(scale: anchor.modelScale)
+                    planeModel.transform.translation = stringToSIMD3(scale: anchor.modelPosition)
+                    planeModel.transform.rotation = modelRotationToSimd_quatf(rotation: anchor.modelRotation)
+                    anchorEntity.addChild(planeModel)
+                    break
+                case "redSquare":
+                    let planeMesh = MeshResource.generatePlane(width: 0.3, depth: 0.3)
+                    var planeMaterial = UnlitMaterial()
+                    planeMaterial.baseColor = MaterialColorParameter.color(.red.withAlphaComponent(0.7))
+                    let planeModel = ModelEntity(mesh: planeMesh, materials: [planeMaterial])
+                    planeModel.transform.scale = stringToSIMD3(scale: anchor.modelScale)
+                    planeModel.transform.translation = stringToSIMD3(scale: anchor.modelPosition)
+                    planeModel.transform.rotation = modelRotationToSimd_quatf(rotation: anchor.modelRotation)
+                    anchorEntity.addChild(planeModel)
+                    break
+                default:
+                    return
+            }
+            self.arView.scene.anchors.append(anchorEntity)
         }
     }
     
