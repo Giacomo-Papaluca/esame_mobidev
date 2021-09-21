@@ -89,7 +89,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
         
         if let _ = anchor as? ARImageAnchor {
             print("image found")
-            let gioconda = models[0].modelEntity!
+            let gioconda = models.first(where: {$0.modelName == "gioconda"})!.modelEntity!
             anchorEntity.addChild(gioconda)
         }
         
@@ -97,14 +97,14 @@ class CustomARView: UIViewController, ARSessionDelegate {
             print("anchor: " + anchor.name! + "; scale: " + anchor.modelScale)
             switch anchor.name {
                 case "biplane":
-                    let toyBiplaneEntity = models[2].modelEntity!
+                    let toyBiplaneEntity = models.first(where: {$0.modelName == "toy_biplane"})!.modelEntity!
                     toyBiplaneEntity.transform.scale = stringToSIMD3(scale: anchor.modelScale)
                     toyBiplaneEntity.transform.translation = stringToSIMD3(scale: anchor.modelPosition)
                     toyBiplaneEntity.transform.rotation = modelRotationToSimd_quatf(rotation: anchor.modelRotation)
                     anchorEntity.addChild(toyBiplaneEntity)
                     break
                 case "arrow":
-                    let arrowEntity = models[1].modelEntity!.clone(recursive: true)
+                    let arrowEntity = models.first(where: {$0.modelName == "myArrow"})!.modelEntity!.clone(recursive: true)
                     arrowEntity.transform.scale = stringToSIMD3(scale: anchor.modelScale)
                     arrowEntity.transform.translation = stringToSIMD3(scale: anchor.modelPosition)
                     arrowEntity.transform.rotation = modelRotationToSimd_quatf(rotation: anchor.modelRotation)
@@ -129,6 +129,13 @@ class CustomARView: UIViewController, ARSessionDelegate {
                     planeModel.transform.translation = stringToSIMD3(scale: anchor.modelPosition)
                     planeModel.transform.rotation = modelRotationToSimd_quatf(rotation: anchor.modelRotation)
                     anchorEntity.addChild(planeModel)
+                    break
+                case "dangerLine":
+                    let dangerEntity = models.first(where: {$0.modelName == "dangerLine"})!.modelEntity!.clone(recursive: true)
+                    dangerEntity.transform.scale = stringToSIMD3(scale: anchor.modelScale)
+                    dangerEntity.transform.translation = stringToSIMD3(scale: anchor.modelPosition)
+                    dangerEntity.transform.rotation = modelRotationToSimd_quatf(rotation: anchor.modelRotation)
+                    anchorEntity.addChild(dangerEntity)
                     break
                 default:
                     return

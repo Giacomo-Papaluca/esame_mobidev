@@ -3,5 +3,10 @@
     "libraryIdentifier" : "afc6343d4730653ef7b7c198eae33074",
     "format" : "model",
     "displayName" : "arrow.usdz"
+  },
+  {
+    "libraryIdentifier" : "1b3e775cafe37d0fb2ff324060de36e5",
+    "format" : "image",
+    "displayName" : "dangertape.png"
   }
 ]
