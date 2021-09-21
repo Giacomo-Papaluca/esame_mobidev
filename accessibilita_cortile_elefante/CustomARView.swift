@@ -213,7 +213,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
             self.anchorOgbjectMapping[arAnchor.identifier] = biplaneModel
             break
         case "arrow":
-            let arrowModel = models.first(where: {$0.modelName == "myArrow"})!.modelEntity!.clone(recursive: true)
+            let arrowModel = models.first(where: {$0.modelName == "arrow"})!.modelEntity!.clone(recursive: true)
             
             let arAnchor = CustomARAnchor(name: actualObject, transform: result.worldTransform, modelScale: arrowModel.transform.scale)
             self.arView.session.add(anchor: arAnchor)
