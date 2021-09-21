@@ -18,6 +18,7 @@
 		2413AD8C26CD66EA00D7DBA8 /* accessibilita_cortile_elefanteUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2413AD8B26CD66EA00D7DBA8 /* accessibilita_cortile_elefanteUITests.swift */; };
 		2417588A26E9FBD0007F387E /* toy_biplane.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 2417588926E9FBD0007F387E /* toy_biplane.usdz */; };
 		24765A4826FA02C000297D47 /* myArrow.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 24765A4726FA02C000297D47 /* myArrow.usdz */; };
+		24765A4E26FA0A7E00297D47 /* dangerLine.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 24765A4D26FA0A7E00297D47 /* dangerLine.usdz */; };
 		2486F02526F89733005BC1B6 /* CustomARAnchor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2486F02426F89733005BC1B6 /* CustomARAnchor.swift */; };
 		2495326C26F349CF00715F55 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2495326B26F349CF00715F55 /* Model.swift */; };
 /* End PBXBuildFile section */
@@ -57,6 +58,7 @@
 		2413AD8D26CD66EA00D7DBA8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2417588926E9FBD0007F387E /* toy_biplane.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = toy_biplane.usdz; sourceTree = "<group>"; };
 		24765A4726FA02C000297D47 /* myArrow.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = myArrow.usdz; sourceTree = "<group>"; };
+		24765A4D26FA0A7E00297D47 /* dangerLine.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = dangerLine.usdz; sourceTree = "<group>"; };
 		2486F02426F89733005BC1B6 /* CustomARAnchor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomARAnchor.swift; sourceTree = "<group>"; };
 		2495326B26F349CF00715F55 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -155,6 +157,7 @@
 			children = (
 				2417588926E9FBD0007F387E /* toy_biplane.usdz */,
 				24765A4726FA02C000297D47 /* myArrow.usdz */,
+				24765A4D26FA0A7E00297D47 /* dangerLine.usdz */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -262,6 +265,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				24765A4E26FA0A7E00297D47 /* dangerLine.usdz in Resources */,
 				2413AD7326CD66EA00D7DBA8 /* Preview Assets.xcassets in Resources */,
 				24117F9926E7B22E0009005B /* CustomARView.xib in Resources */,
 				2417588A26E9FBD0007F387E /* toy_biplane.usdz in Resources */,

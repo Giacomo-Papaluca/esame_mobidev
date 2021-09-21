@@ -62,6 +62,9 @@ class CustomARView: UIViewController, ARSessionDelegate {
             },
             UIAction(title: "arrow") {_ in
                 self.actualObject = "arrow"
+            },
+            UIAction(title: "dangerLine") {_ in
+                self.actualObject = "dangerLine"
             }
         ]
     }
@@ -197,7 +200,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
         
         switch actualObject {
         case "biplane":
-            let biplaneModel = models[1].modelEntity!
+            let biplaneModel = models[2].modelEntity!
             
             let arAnchor = CustomARAnchor(name: actualObject, transform: result.worldTransform, modelScale: biplaneModel.transform.scale)
             self.arView.session.add(anchor: arAnchor)
@@ -210,7 +213,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
             self.anchorOgbjectMapping[arAnchor.identifier] = biplaneModel
             break
         case "arrow":
-            let arrowModel = models[0].modelEntity!.clone(recursive: true)
+            let arrowModel = models[1].modelEntity!.clone(recursive: true)
             
             let arAnchor = CustomARAnchor(name: actualObject, transform: result.worldTransform, modelScale: arrowModel.transform.scale)
             self.arView.session.add(anchor: arAnchor)
@@ -254,6 +257,19 @@ class CustomARView: UIViewController, ARSessionDelegate {
             
             self.arView.scene.addAnchor(anchorEntity)
             self.anchorOgbjectMapping[arAnchor.identifier] = planeModel
+            break
+        case "dangerLine":
+            let dangerModel = models[0].modelEntity!.clone(recursive: true)
+            
+            let arAnchor = CustomARAnchor(name: actualObject, transform: result.worldTransform, modelScale: dangerModel.transform.scale)
+            self.arView.session.add(anchor: arAnchor)
+            let anchorEntity = AnchorEntity(anchor: arAnchor)
+            
+            anchorEntity.addChild(dangerModel)
+            installGestures(on: dangerModel)
+            
+            self.arView.scene.addAnchor(anchorEntity)
+            self.anchorOgbjectMapping[arAnchor.identifier] = dangerModel
             break
         default:
             return
