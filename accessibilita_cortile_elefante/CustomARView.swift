@@ -59,6 +59,9 @@ class CustomARView: UIViewController, ARSessionDelegate {
             },
             UIAction(title: "redSquare") { _ in
                 self.actualObject = "redSquare"
+            },
+            UIAction(title: "arrow") {_ in
+                self.actualObject = "arrow"
             }
         ]
     }
@@ -194,7 +197,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
         
         switch actualObject {
         case "biplane":
-            let biplaneModel = models[0].modelEntity!
+            let biplaneModel = models[1].modelEntity!
             
             let arAnchor = CustomARAnchor(name: actualObject, transform: result.worldTransform, modelScale: biplaneModel.transform.scale)
             self.arView.session.add(anchor: arAnchor)
@@ -205,6 +208,19 @@ class CustomARView: UIViewController, ARSessionDelegate {
             
             self.arView.scene.addAnchor(anchorEntity)
             self.anchorOgbjectMapping[arAnchor.identifier] = biplaneModel
+            break
+        case "arrow":
+            let arrowModel = models[0].modelEntity!.clone(recursive: true)
+            
+            let arAnchor = CustomARAnchor(name: actualObject, transform: result.worldTransform, modelScale: arrowModel.transform.scale)
+            self.arView.session.add(anchor: arAnchor)
+            let anchorEntity = AnchorEntity(anchor: arAnchor)
+            
+            anchorEntity.addChild(arrowModel)
+            installGestures(on: arrowModel)
+            
+            self.arView.scene.addAnchor(anchorEntity)
+            self.anchorOgbjectMapping[arAnchor.identifier] = arrowModel
             break
         case "greenSquare":
             
