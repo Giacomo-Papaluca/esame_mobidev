@@ -163,6 +163,8 @@ class CustomARView: UIViewController, ARSessionDelegate {
                 return
             }
             
+            
+            //saving realityKit models info in customARAnchors
             for couple in self.anchorOgbjectMapping {
                 print(couple)
                 let model = couple.value
@@ -202,7 +204,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
         case "biplane":
             let biplaneModel = models.first(where: {$0.modelName == "toy_biplane"})!.modelEntity!
             
-            let arAnchor = CustomARAnchor(name: actualObject, transform: result.worldTransform, modelScale: biplaneModel.transform.scale)
+            let arAnchor = CustomARAnchor(name: actualObject, transform: result.worldTransform)
             self.arView.session.add(anchor: arAnchor)
             let anchorEntity = AnchorEntity(anchor: arAnchor)
             
@@ -215,7 +217,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
         case "arrow":
             let arrowModel = models.first(where: {$0.modelName == "arrow"})!.modelEntity!.clone(recursive: true)
             
-            let arAnchor = CustomARAnchor(name: actualObject, transform: result.worldTransform, modelScale: arrowModel.transform.scale)
+            let arAnchor = CustomARAnchor(name: actualObject, transform: result.worldTransform)
             self.arView.session.add(anchor: arAnchor)
             let anchorEntity = AnchorEntity(anchor: arAnchor)
             
@@ -232,7 +234,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
             planeMaterial.baseColor = MaterialColorParameter.color(.green.withAlphaComponent(0.7))
             let planeModel = ModelEntity(mesh: planeMesh, materials: [planeMaterial])
             
-            let arAnchor = CustomARAnchor(name: actualObject, transform: result.worldTransform, modelScale: planeModel.transform.scale)
+            let arAnchor = CustomARAnchor(name: actualObject, transform: result.worldTransform)
             self.arView.session.add(anchor: arAnchor)
             let anchorEntity = AnchorEntity(anchor: arAnchor)
             
@@ -248,7 +250,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
             planeMaterial.baseColor = MaterialColorParameter.color(.red.withAlphaComponent(0.7))
             let planeModel = ModelEntity(mesh: planeMesh, materials: [planeMaterial])
             
-            let arAnchor = CustomARAnchor(name: actualObject, transform: result.worldTransform, modelScale: planeModel.transform.scale)
+            let arAnchor = CustomARAnchor(name: actualObject, transform: result.worldTransform)
             self.arView.session.add(anchor: arAnchor)
             let anchorEntity = AnchorEntity(anchor: arAnchor)
             
@@ -261,7 +263,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
         case "dangerLine":
             let dangerModel = models.first(where: {$0.modelName == "dangerLine"})!.modelEntity!.clone(recursive: true)
             
-            let arAnchor = CustomARAnchor(name: actualObject, transform: result.worldTransform, modelScale: dangerModel.transform.scale)
+            let arAnchor = CustomARAnchor(name: actualObject, transform: result.worldTransform)
             self.arView.session.add(anchor: arAnchor)
             let anchorEntity = AnchorEntity(anchor: arAnchor)
             
