@@ -15,8 +15,8 @@ class CustomARAnchor: ARAnchor {
     var modelPosition: String
     
 
-    init(name: String, transform: float4x4, modelScale: SIMD3<Float>) {
-        self.modelScale = modelScale.description
+    override init(name: String, transform: float4x4) {
+        self.modelScale = ""
         self.modelRotation = ""
         self.modelPosition = ""
         super.init(name: name, transform: transform)

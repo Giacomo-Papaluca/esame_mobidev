@@ -84,6 +84,12 @@ class CustomARView: UIViewController, ARSessionDelegate {
     }
     
    
+    fileprivate func adjustModelEntity(_ toyBiplaneEntity: ModelEntity, _ anchor: CustomARAnchor) {
+        toyBiplaneEntity.transform.scale = stringToSIMD3(scale: anchor.modelScale)
+        toyBiplaneEntity.transform.translation = stringToSIMD3(scale: anchor.modelPosition)
+        toyBiplaneEntity.transform.rotation = modelRotationToSimd_quatf(rotation: anchor.modelRotation)
+    }
+    
     func addAnchorEntityToScene(anchor: ARAnchor) {
         let anchorEntity = AnchorEntity(anchor: anchor)
         
@@ -98,16 +104,12 @@ class CustomARView: UIViewController, ARSessionDelegate {
             switch anchor.name {
                 case "biplane":
                     let toyBiplaneEntity = models.first(where: {$0.modelName == "toy_biplane"})!.modelEntity!
-                    toyBiplaneEntity.transform.scale = stringToSIMD3(scale: anchor.modelScale)
-                    toyBiplaneEntity.transform.translation = stringToSIMD3(scale: anchor.modelPosition)
-                    toyBiplaneEntity.transform.rotation = modelRotationToSimd_quatf(rotation: anchor.modelRotation)
+                    adjustModelEntity(toyBiplaneEntity, anchor)
                     anchorEntity.addChild(toyBiplaneEntity)
                     break
                 case "arrow":
-                    let arrowEntity = models.first(where: {$0.modelName == "myArrow"})!.modelEntity!.clone(recursive: true)
-                    arrowEntity.transform.scale = stringToSIMD3(scale: anchor.modelScale)
-                    arrowEntity.transform.translation = stringToSIMD3(scale: anchor.modelPosition)
-                    arrowEntity.transform.rotation = modelRotationToSimd_quatf(rotation: anchor.modelRotation)
+                    let arrowEntity = models.first(where: {$0.modelName == "arrow"})!.modelEntity!.clone(recursive: true)
+                    adjustModelEntity(arrowEntity, anchor)
                     anchorEntity.addChild(arrowEntity)
                     break
                 case "greenSquare":
@@ -115,9 +117,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
                     var planeMaterial = UnlitMaterial()
                     planeMaterial.baseColor = MaterialColorParameter.color(.green.withAlphaComponent(0.7))
                     let planeModel = ModelEntity(mesh: planeMesh, materials: [planeMaterial])
-                    planeModel.transform.scale = stringToSIMD3(scale: anchor.modelScale)
-                    planeModel.transform.translation = stringToSIMD3(scale: anchor.modelPosition)
-                    planeModel.transform.rotation = modelRotationToSimd_quatf(rotation: anchor.modelRotation)
+                    adjustModelEntity(planeModel, anchor)
                     anchorEntity.addChild(planeModel)
                     break
                 case "redSquare":
@@ -125,16 +125,12 @@ class CustomARView: UIViewController, ARSessionDelegate {
                     var planeMaterial = UnlitMaterial()
                     planeMaterial.baseColor = MaterialColorParameter.color(.red.withAlphaComponent(0.7))
                     let planeModel = ModelEntity(mesh: planeMesh, materials: [planeMaterial])
-                    planeModel.transform.scale = stringToSIMD3(scale: anchor.modelScale)
-                    planeModel.transform.translation = stringToSIMD3(scale: anchor.modelPosition)
-                    planeModel.transform.rotation = modelRotationToSimd_quatf(rotation: anchor.modelRotation)
+                    adjustModelEntity(planeModel, anchor)
                     anchorEntity.addChild(planeModel)
                     break
                 case "dangerLine":
                     let dangerEntity = models.first(where: {$0.modelName == "dangerLine"})!.modelEntity!.clone(recursive: true)
-                    dangerEntity.transform.scale = stringToSIMD3(scale: anchor.modelScale)
-                    dangerEntity.transform.translation = stringToSIMD3(scale: anchor.modelPosition)
-                    dangerEntity.transform.rotation = modelRotationToSimd_quatf(rotation: anchor.modelRotation)
+                    adjustModelEntity(dangerEntity, anchor)
                     anchorEntity.addChild(dangerEntity)
                     break
                 default:
