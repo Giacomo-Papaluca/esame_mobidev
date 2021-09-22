@@ -195,37 +195,34 @@ class CustomARView: UIViewController, ARSessionDelegate {
     }
     // MARK: - Placing AR Content
 
+    fileprivate func addModel(_ biplaneModel: ModelEntity, to anchorEntity: AnchorEntity, mappedWith arAnchor: CustomARAnchor) {
+        anchorEntity.addChild(biplaneModel)
+        installGestures(on: biplaneModel)
+        
+        self.anchorOgbjectMapping[arAnchor.identifier] = biplaneModel
+    }
+    
     @objc private func arViewDidTap(_ sender: UITapGestureRecognizer){
         guard let result = self.arView.raycast(from: sender.location(in: self.arView), allowing: .existingPlaneGeometry, alignment: .horizontal).first else {
             return
         }
         
+        let arAnchor = CustomARAnchor(name: actualObject, transform: result.worldTransform)
+        self.arView.session.add(anchor: arAnchor)
+        let anchorEntity = AnchorEntity(anchor: arAnchor)
+        
         switch actualObject {
         case "biplane":
             let biplaneModel = models.first(where: {$0.modelName == "toy_biplane"})!.modelEntity!
             
-            let arAnchor = CustomARAnchor(name: actualObject, transform: result.worldTransform)
-            self.arView.session.add(anchor: arAnchor)
-            let anchorEntity = AnchorEntity(anchor: arAnchor)
+            addModel(biplaneModel, to: anchorEntity, mappedWith: arAnchor)
             
-            anchorEntity.addChild(biplaneModel)
-            installGestures(on: biplaneModel)
-            
-            self.arView.scene.addAnchor(anchorEntity)
-            self.anchorOgbjectMapping[arAnchor.identifier] = biplaneModel
             break
         case "arrow":
             let arrowModel = models.first(where: {$0.modelName == "arrow"})!.modelEntity!.clone(recursive: true)
+                        
+            addModel(arrowModel, to: anchorEntity, mappedWith: arAnchor)
             
-            let arAnchor = CustomARAnchor(name: actualObject, transform: result.worldTransform)
-            self.arView.session.add(anchor: arAnchor)
-            let anchorEntity = AnchorEntity(anchor: arAnchor)
-            
-            anchorEntity.addChild(arrowModel)
-            installGestures(on: arrowModel)
-            
-            self.arView.scene.addAnchor(anchorEntity)
-            self.anchorOgbjectMapping[arAnchor.identifier] = arrowModel
             break
         case "greenSquare":
             
@@ -233,50 +230,31 @@ class CustomARView: UIViewController, ARSessionDelegate {
             var planeMaterial = SimpleMaterial()
             planeMaterial.baseColor = MaterialColorParameter.color(.green.withAlphaComponent(0.7))
             let planeModel = ModelEntity(mesh: planeMesh, materials: [planeMaterial])
+                        
+            addModel(planeModel, to: anchorEntity, mappedWith: arAnchor)
             
-            let arAnchor = CustomARAnchor(name: actualObject, transform: result.worldTransform)
-            self.arView.session.add(anchor: arAnchor)
-            let anchorEntity = AnchorEntity(anchor: arAnchor)
-            
-            anchorEntity.addChild(planeModel)
-            installGestures(on: planeModel)
-            
-            self.arView.scene.addAnchor(anchorEntity)
-            self.anchorOgbjectMapping[arAnchor.identifier] = planeModel
             break
         case "redSquare":
             let planeMesh = MeshResource.generatePlane(width: 0.3, depth: 0.3)
             var planeMaterial = SimpleMaterial()
             planeMaterial.baseColor = MaterialColorParameter.color(.red.withAlphaComponent(0.7))
             let planeModel = ModelEntity(mesh: planeMesh, materials: [planeMaterial])
+                        
+            addModel(planeModel, to: anchorEntity, mappedWith: arAnchor)
             
-            let arAnchor = CustomARAnchor(name: actualObject, transform: result.worldTransform)
-            self.arView.session.add(anchor: arAnchor)
-            let anchorEntity = AnchorEntity(anchor: arAnchor)
-            
-            anchorEntity.addChild(planeModel)
-            installGestures(on: planeModel)
-            
-            self.arView.scene.addAnchor(anchorEntity)
-            self.anchorOgbjectMapping[arAnchor.identifier] = planeModel
             break
         case "dangerLine":
             let dangerModel = models.first(where: {$0.modelName == "dangerLine"})!.modelEntity!.clone(recursive: true)
+                        
+            addModel(dangerModel, to: anchorEntity, mappedWith: arAnchor)
             
-            let arAnchor = CustomARAnchor(name: actualObject, transform: result.worldTransform)
-            self.arView.session.add(anchor: arAnchor)
-            let anchorEntity = AnchorEntity(anchor: arAnchor)
-            
-            anchorEntity.addChild(dangerModel)
-            installGestures(on: dangerModel)
-            
-            self.arView.scene.addAnchor(anchorEntity)
-            self.anchorOgbjectMapping[arAnchor.identifier] = dangerModel
             break
         default:
             return
         }
         
+        self.arView.scene.addAnchor(anchorEntity)
+    
     }
     
     func installGestures(on object:ModelEntity){
