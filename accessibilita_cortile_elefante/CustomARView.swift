@@ -195,11 +195,11 @@ class CustomARView: UIViewController, ARSessionDelegate {
     }
     // MARK: - Placing AR Content
 
-    fileprivate func addModel(_ biplaneModel: ModelEntity, to anchorEntity: AnchorEntity, mappedWith arAnchor: CustomARAnchor) {
-        anchorEntity.addChild(biplaneModel)
-        installGestures(on: biplaneModel)
+    fileprivate func addModel(_ modelEnity: ModelEntity, to anchorEntity: AnchorEntity, mappedWith arAnchor: CustomARAnchor) {
+        anchorEntity.addChild(modelEnity)
+        installGestures(on: modelEnity)
         
-        self.anchorOgbjectMapping[arAnchor.identifier] = biplaneModel
+        self.anchorOgbjectMapping[arAnchor.identifier] = modelEnity
     }
     
     @objc private func arViewDidTap(_ sender: UITapGestureRecognizer){
