@@ -139,7 +139,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
     func saveExperience() {
         self.arView.session.getCurrentWorldMap { worldMap, _ in
             guard let map = worldMap else {
-                print("Can't get current world map")
+                self.showAlert(title: "Can't get worold map!", message: "Can't get current worold map.\n\nRetry later.")
                 return
             }
             
@@ -296,6 +296,24 @@ extension ARFrame.WorldMappingStatus: CustomStringConvertible {
             return "Mapped"
         @unknown default:
             return "Unknown"
+        }
+    }
+}
+
+extension UIViewController {
+    func showAlert(title: String,
+                   message: String,
+                   buttonTitle: String = "OK",
+                   showCancel: Bool = false,
+                   buttonHandler: ((UIAlertAction) -> Void)? = nil) {
+        print(title + "\n" + message)
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: buttonTitle, style: .default, handler: buttonHandler))
+        if showCancel {
+            alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        }
+        DispatchQueue.main.async {
+            self.present(alertController, animated: true, completion: nil)
         }
     }
 }
