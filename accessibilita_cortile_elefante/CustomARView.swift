@@ -20,6 +20,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
     private var actualObject: String = ""
     
     private var anchorOgbjectMapping: [UUID:ModelEntity] = [:]
+    private var removedAnchors: [UUID] = []
     
     private var models: [Model] = {
         let filemanager = FileManager.default
@@ -86,10 +87,8 @@ class CustomARView: UIViewController, ARSessionDelegate {
         self.arView.session.delegate = self
         self.arView.debugOptions = [ .showFeaturePoints ]
         self.arView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(arViewDidTap(_:))) )
-        if self.worldMapData != nil {
-            self.loadExperience()
-        }
         createWorldMapsFolder()
+        enableObjectRemoval()
     }
     
     override func viewDidLoad() {
@@ -136,25 +135,6 @@ class CustomARView: UIViewController, ARSessionDelegate {
             return try? Data(contentsOf: URL(fileURLWithPath: self.worldMapFilePath))
     }
     
-    func loadExperience() {
-            
-        /// - Tag: ReadWorldMap
-        let worldMap: ARWorldMap = {
-            guard let data = self.worldMapData
-                else { fatalError("Map data should already be verified to exist before Load button is enabled.") }
-            do {
-                guard let worldMap = try NSKeyedUnarchiver.unarchivedObject(ofClass: ARWorldMap.self, from: data)
-                    else { fatalError("No ARWorldMap in archive.") }
-                return worldMap
-            } catch {
-                fatalError("Can't unarchive ARWorldMap from file data: \(error)")
-            }
-        }()
-            
-        let configuration = self.defaultConfiguration // this app's standard world tracking settings
-        configuration.initialWorldMap = worldMap
-        self.arView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
-        }
         
     func saveExperience() {
         self.arView.session.getCurrentWorldMap { worldMap, _ in
@@ -173,7 +153,10 @@ class CustomARView: UIViewController, ARSessionDelegate {
                 anchor.modelRotation = model.transform.rotation.debugDescription
                 anchor.modelPosition = model.transform.translation.description
             }
-            
+            //removing anchors associated with removed entities
+            for id in self.removedAnchors {
+                map.anchors.removeAll(where: {$0.identifier == id})
+            }
             
             do {
                 let data = try NSKeyedArchiver.archivedData(withRootObject: map, requiringSecureCoding: true)
@@ -258,21 +241,28 @@ class CustomARView: UIViewController, ARSessionDelegate {
     }
     
     func installGestures(on object:ModelEntity){
-           object.generateCollisionShapes(recursive: true)
+        object.generateCollisionShapes(recursive: true)
         arView.installGestures([.rotation, .scale, .translation], for: object)
-       }
-    
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
     }
-    */
+    
+    func enableObjectRemoval(){
+        self.arView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(recognizer:))))
+    }
+    
+    @objc func handleLongPress(recognizer: UILongPressGestureRecognizer){
+        let location = recognizer.location(in: self.arView)
+        
+        if let entity = self.arView.entity(at: location) {
+            if let anchorEntity = entity.anchor, let anchor = anchorEntity.anchor {
+                if let id = anchor.anchorIdentifier, let _ = anchorOgbjectMapping[id] {
+                    anchorOgbjectMapping.removeValue(forKey: id)
+                    removedAnchors.append(id)
+                    print("eliminato mapping con id \(id)")
+                }
+                anchorEntity.removeFromParent()
+            }
+        }
+    }
     
     // MARK: - ARSessionDelegate
     
