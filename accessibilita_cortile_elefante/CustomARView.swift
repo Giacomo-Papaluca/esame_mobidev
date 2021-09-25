@@ -87,6 +87,10 @@ class CustomARView: UIViewController, ARSessionDelegate {
         self.arView.session.delegate = self
         self.arView.debugOptions = [ .showFeaturePoints ]
         self.arView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(arViewDidTap(_:))) )
+        if self.existingWorldMapURL != nil {
+            showAlert(title: "Found world map!", message: "Found existing world map. If you didn't mean to load an existing map, be sure not to have a file named WorldMap in the root directory of the project.")
+            loadExperience()
+        }
         createWorldMapsFolder()
         enableObjectRemoval()
     }
@@ -130,6 +134,8 @@ class CustomARView: UIViewController, ARSessionDelegate {
                 return filePath
 
     }
+    
+    var existingWorldMapURL: URL? = Bundle.main.url(forResource: "WorldMap", withExtension: "")
     
     var worldMapData: Data? {
             return try? Data(contentsOf: URL(fileURLWithPath: self.worldMapFilePath))
@@ -176,6 +182,23 @@ class CustomARView: UIViewController, ARSessionDelegate {
     @IBAction func SalvaDidTap(_ sender: Any) {
         saveExperience()
     }
+    
+    func loadExperience() {
+                
+        /// - Tag: ReadWorldMap
+        let mapData = try! Data(contentsOf: self.existingWorldMapURL!)
+              
+        let worldMap = try! NSKeyedUnarchiver.unarchivedObject(ofClass: ARWorldMap.self, from: mapData)
+            
+        let configuration = self.defaultConfiguration
+        configuration.initialWorldMap = worldMap
+        self.arView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
+        for anchor in worldMap!.anchors {
+            addAnchorEntityToScene(anchor: anchor)
+        }
+            
+    }
+    
     // MARK: - Placing AR Content
 
     fileprivate func addModel(_ modelEnity: ModelEntity, to anchorEntity: AnchorEntity, mappedWith arAnchor: CustomARAnchor) {
@@ -211,7 +234,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
             
             let planeMesh = MeshResource.generatePlane(width: 0.3, depth: 0.3)
             var planeMaterial = SimpleMaterial()
-            planeMaterial.baseColor = MaterialColorParameter.color(.green.withAlphaComponent(0.7))
+            planeMaterial.baseColor = MaterialColorParameter.color(.green)
             let planeModel = ModelEntity(mesh: planeMesh, materials: [planeMaterial])
                         
             addModel(planeModel, to: anchorEntity, mappedWith: arAnchor)
@@ -220,7 +243,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
         case "redSquare":
             let planeMesh = MeshResource.generatePlane(width: 0.3, depth: 0.3)
             var planeMaterial = SimpleMaterial()
-            planeMaterial.baseColor = MaterialColorParameter.color(.red.withAlphaComponent(0.7))
+            planeMaterial.baseColor = MaterialColorParameter.color(.red)
             let planeModel = ModelEntity(mesh: planeMesh, materials: [planeMaterial])
                         
             addModel(planeModel, to: anchorEntity, mappedWith: arAnchor)
@@ -263,6 +286,91 @@ class CustomARView: UIViewController, ARSessionDelegate {
             }
         }
     }
+    
+    // MARK: - Restoring ARContent from existing map
+    
+    fileprivate func adjustModelEntity(_ modelEntity: ModelEntity, _ anchor: CustomARAnchor) {
+        modelEntity.transform.scale = stringToSIMD3(scale: anchor.modelScale)
+        modelEntity.transform.translation = stringToSIMD3(scale: anchor.modelPosition)
+        modelEntity.transform.rotation = modelRotationToSimd_quatf(rotation: anchor.modelRotation)
+        self.anchorOgbjectMapping[anchor.identifier] = modelEntity
+        installGestures(on: modelEntity)
+    }
+        
+    func addAnchorEntityToScene(anchor: ARAnchor) {
+        let anchorEntity = AnchorEntity(anchor: anchor)
+        
+        if let _ = anchor as? ARImageAnchor {
+            print("image found")
+            let gioconda = models.first(where: {$0.modelName == "gioconda"})!.modelEntity!
+            anchorEntity.addChild(gioconda)
+        }
+        
+        if let anchor = anchor as? CustomARAnchor {
+            print("anchor: " + anchor.name! + "; scale: " + anchor.modelScale)
+            switch anchor.name {
+                case "biplane":
+                    let toyBiplaneEntity = try! ModelEntity.loadModel(named: "toy_biplane")
+                    adjustModelEntity(toyBiplaneEntity, anchor)
+                    anchorEntity.addChild(toyBiplaneEntity)
+                    break
+                case "arrow":
+                    let arrowEntity = try! ModelEntity.loadModel(named: "arrow")
+                    adjustModelEntity(arrowEntity, anchor)
+                    anchorEntity.addChild(arrowEntity)
+                    break
+                case "greenSquare":
+                    let planeMesh = MeshResource.generatePlane(width: 0.3, depth: 0.3)
+                    var planeMaterial = UnlitMaterial()
+                    planeMaterial.baseColor = MaterialColorParameter.color(.green)
+                    let planeModel = ModelEntity(mesh: planeMesh, materials: [planeMaterial])
+                    adjustModelEntity(planeModel, anchor)
+                    anchorEntity.addChild(planeModel)
+                    break
+                case "redSquare":
+                    let planeMesh = MeshResource.generatePlane(width: 0.3, depth: 0.3)
+                    var planeMaterial = UnlitMaterial()
+                    planeMaterial.baseColor = MaterialColorParameter.color(.red)
+                    let planeModel = ModelEntity(mesh: planeMesh, materials: [planeMaterial])
+                    adjustModelEntity(planeModel, anchor)
+                    anchorEntity.addChild(planeModel)
+                    break
+                case "dangerLine":
+                    let dangerEntity = try! ModelEntity.loadModel(named: "dangerLine")
+                    adjustModelEntity(dangerEntity, anchor)
+                    anchorEntity.addChild(dangerEntity)
+                    break
+                default:
+                    return
+            }
+        }
+            
+        self.arView.scene.anchors.append(anchorEntity)
+    }
+        
+        // MARK: -Parsing custom anchor properties
+            
+        private func stringToSIMD3(scale str: String) -> SIMD3<Float>{
+            let suffix = str.suffix(from: str.index(str.startIndex, offsetBy: 13))
+            var values = suffix.split(separator: ",")
+            values[2].removeLast()
+            values[2].removeFirst()
+            values[1].removeFirst()
+            for test in values { print(test)}
+            return SIMD3(Float(values[0])!, Float(values[1])!, Float(values[2])!)
+        }
+            
+        private func modelRotationToSimd_quatf(rotation str: String) -> simd_quatf {
+            var values = str.split(separator: ",")
+            let simd1 = Float(values[1].suffix(from: values[1].index(values[1].startIndex, offsetBy: 20)))!
+            values[2].removeFirst()
+            values[3].removeFirst()
+            values[3].removeLast()
+            values[3].removeLast()
+            let simd = SIMD3(simd1, Float(values[2])!, Float(values[3])!)
+            let realVal = Float(values[0].suffix(from: values[0].index(values[0].startIndex, offsetBy: 17)))!
+            return simd_quatf(real: realVal, imag: simd)
+        }
     
     // MARK: - ARSessionDelegate
     
