@@ -219,13 +219,13 @@ class CustomARView: UIViewController, ARSessionDelegate {
         
         switch actualObject {
         case "biplane":
-            let biplaneModel = models.first(where: {$0.modelName == "toy_biplane"})!.modelEntity!
+            let biplaneModel = controlledLoadModelAsync(named: "toy_biplane")
             
             addModel(biplaneModel, to: anchorEntity, mappedWith: arAnchor)
             
             break
         case "arrow":
-            let arrowModel = models.first(where: {$0.modelName == "arrow"})!.modelEntity!.clone(recursive: true)
+            let arrowModel = controlledLoadModelAsync(named: "arrow")
                         
             addModel(arrowModel, to: anchorEntity, mappedWith: arAnchor)
             
@@ -250,7 +250,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
             
             break
         case "dangerLine":
-            let dangerModel = models.first(where: {$0.modelName == "dangerLine"})!.modelEntity!.clone(recursive: true)
+            let dangerModel = controlledLoadModelAsync(named: "dangerLine")
                         
             addModel(dangerModel, to: anchorEntity, mappedWith: arAnchor)
             
@@ -310,12 +310,12 @@ class CustomARView: UIViewController, ARSessionDelegate {
             print("anchor: " + anchor.name! + "; scale: " + anchor.modelScale)
             switch anchor.name {
                 case "biplane":
-                    let toyBiplaneEntity = try! ModelEntity.loadModel(named: "toy_biplane")
+                    let toyBiplaneEntity = controlledLoadModelAsync(named: "toy_biplane")
                     adjustModelEntity(toyBiplaneEntity, anchor)
                     anchorEntity.addChild(toyBiplaneEntity)
                     break
                 case "arrow":
-                    let arrowEntity = try! ModelEntity.loadModel(named: "arrow")
+                    let arrowEntity = controlledLoadModelAsync(named: "arrow")
                     adjustModelEntity(arrowEntity, anchor)
                     anchorEntity.addChild(arrowEntity)
                     break
@@ -336,7 +336,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
                     anchorEntity.addChild(planeModel)
                     break
                 case "dangerLine":
-                    let dangerEntity = try! ModelEntity.loadModel(named: "dangerLine")
+                    let dangerEntity = controlledLoadModelAsync(named: "dangerLine")
                     adjustModelEntity(dangerEntity, anchor)
                     anchorEntity.addChild(dangerEntity)
                     break
@@ -422,6 +422,23 @@ extension UIViewController {
         }
         DispatchQueue.main.async {
             self.present(alertController, animated: true, completion: nil)
+        }
+    }
+}
+
+extension CustomARView {
+    func controlledLoadModelAsync(named name: String) -> ModelEntity {
+        if name == "toy_biplane" {
+            guard let entity = self.models.first(where: {$0.modelName == name})!.modelEntity else {
+                return try! ModelEntity.loadModel(named: name)
+            }
+            return entity
+        }
+        else {
+            guard let entity = self.models.first(where: {$0.modelName == name})!.modelEntity?.clone(recursive: true) else {
+                return try! ModelEntity.loadModel(named: name)
+            }
+            return entity
         }
     }
 }
