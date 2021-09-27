@@ -50,6 +50,8 @@ class CustomARView: UIViewController, ARSessionDelegate {
         self.arView.session.delegate = self
         self.arView.debugOptions = [ .showFeaturePoints ]
         self.loadExperience()
+        self.arView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(recognizer:))))
+
         
     }
     
@@ -59,6 +61,25 @@ class CustomARView: UIViewController, ARSessionDelegate {
         // Do any additional setup after loading the view.
     }
     
+    // MARK: - User intreractions
+    
+    @objc func handleTap(recognizer: UITapGestureRecognizer) {
+        print("tapped")
+        let location = recognizer.location(in: self.arView)
+                
+            if let entity = self.arView.entity(at: location) {
+                print(entity.debugDescription)
+                switch entity.name {
+                case "toy_biplane":
+                    showAlert(title: "Toy Biplane", message: "Famosissima scultura di aeroplano risalente al sceolo XX")
+                    break
+                case "gioconda":
+                    showAlert(title: "La Gioconda", message: "Questa è la gioconda, molto bella e poco bionda.")
+                default:
+                    break
+                }
+            }
+    }
     
     // MARK: - Persistence: Saving and Loading
     
@@ -95,7 +116,9 @@ class CustomARView: UIViewController, ARSessionDelegate {
         
         if let _ = anchor as? ARImageAnchor {
             print("image found")
-            let gioconda = models.first(where: {$0.modelName == "gioconda"})!.modelEntity!
+            let gioconda = controlledLoadModelAsync(named: "gioconda")
+            gioconda.generateCollisionShapes(recursive: true)
+            gioconda.name = "gioconda"
             anchorEntity.addChild(gioconda)
         }
         
@@ -103,19 +126,21 @@ class CustomARView: UIViewController, ARSessionDelegate {
             print("anchor: " + anchor.name! + "; scale: " + anchor.modelScale)
             switch anchor.name {
                 case "biplane":
-                    let toyBiplaneEntity = models.first(where: {$0.modelName == "toy_biplane"})!.modelEntity!
+                    let toyBiplaneEntity = controlledLoadModelAsync(named: "toy_biplane")
                     adjustModelEntity(toyBiplaneEntity, anchor)
+                    toyBiplaneEntity.generateCollisionShapes(recursive: true)
+                    toyBiplaneEntity.name = "toy_biplane"
                     anchorEntity.addChild(toyBiplaneEntity)
                     break
                 case "arrow":
-                    let arrowEntity = models.first(where: {$0.modelName == "arrow"})!.modelEntity!.clone(recursive: true)
+                    let arrowEntity = controlledLoadModelAsync(named: "arrow")
                     adjustModelEntity(arrowEntity, anchor)
                     anchorEntity.addChild(arrowEntity)
                     break
                 case "greenSquare":
                     let planeMesh = MeshResource.generatePlane(width: 0.3, depth: 0.3)
                     var planeMaterial = UnlitMaterial()
-                    planeMaterial.baseColor = MaterialColorParameter.color(.green.withAlphaComponent(0.7))
+                    planeMaterial.baseColor = MaterialColorParameter.color(.green)
                     let planeModel = ModelEntity(mesh: planeMesh, materials: [planeMaterial])
                     adjustModelEntity(planeModel, anchor)
                     anchorEntity.addChild(planeModel)
@@ -123,13 +148,13 @@ class CustomARView: UIViewController, ARSessionDelegate {
                 case "redSquare":
                     let planeMesh = MeshResource.generatePlane(width: 0.3, depth: 0.3)
                     var planeMaterial = UnlitMaterial()
-                    planeMaterial.baseColor = MaterialColorParameter.color(.red.withAlphaComponent(0.7))
+                    planeMaterial.baseColor = MaterialColorParameter.color(.red)
                     let planeModel = ModelEntity(mesh: planeMesh, materials: [planeMaterial])
                     adjustModelEntity(planeModel, anchor)
                     anchorEntity.addChild(planeModel)
                     break
                 case "dangerLine":
-                    let dangerEntity = models.first(where: {$0.modelName == "dangerLine"})!.modelEntity!.clone(recursive: true)
+                    let dangerEntity = controlledLoadModelAsync(named: "dangerLine")
                     adjustModelEntity(dangerEntity, anchor)
                     anchorEntity.addChild(dangerEntity)
                     break
@@ -196,3 +221,38 @@ class CustomARView: UIViewController, ARSessionDelegate {
 
 }
 
+extension CustomARView {
+    func controlledLoadModelAsync(named name: String) -> ModelEntity {
+        if name == "toy_biplane" || name == "gioconda" {
+            guard let entity = self.models.first(where: {$0.modelName == name})!.modelEntity else {
+                return try! ModelEntity.loadModel(named: name)
+            }
+            return entity
+        }
+        else {
+            guard let entity = self.models.first(where: {$0.modelName == name})!.modelEntity?.clone(recursive: true) else {
+                return try! ModelEntity.loadModel(named: name)
+            }
+            return entity
+        }
+    }
+}
+
+
+extension UIViewController {
+    func showAlert(title: String,
+                   message: String,
+                   buttonTitle: String = "OK",
+                   showCancel: Bool = false,
+                   buttonHandler: ((UIAlertAction) -> Void)? = nil) {
+        print(title + "\n" + message)
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: buttonTitle, style: .default, handler: buttonHandler))
+        if showCancel {
+            alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        }
+        DispatchQueue.main.async {
+            self.present(alertController, animated: true, completion: nil)
+        }
+    }
+}
