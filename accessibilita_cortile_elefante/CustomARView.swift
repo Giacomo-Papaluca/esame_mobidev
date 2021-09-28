@@ -15,6 +15,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
     
     @IBOutlet weak var salvaButton: UIButton!
     
+    var timerMessage: Timer = Timer()
     private var models: [Model] = {
         let filemanager = FileManager.default
         
@@ -52,7 +53,8 @@ class CustomARView: UIViewController, ARSessionDelegate {
         self.loadExperience()
         self.arView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(recognizer:))))
 
-        
+        timerMessage = Timer.scheduledTimer(withTimeInterval: 20.0, repeats: false) {_ in self.showAlert(title: "stanza non riconosciuta", message: "accertarsi di essere nel cortile dell'elefante")}
+        print(timerMessage.fireDate)
     }
     
     override func viewDidLoad() {
@@ -115,6 +117,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
         let anchorEntity = AnchorEntity(anchor: anchor)
         
         if let _ = anchor as? ARImageAnchor {
+            timerMessage.invalidate()
             print("image found")
             let gioconda = controlledLoadModelAsync(named: "gioconda")
             gioconda.generateCollisionShapes(recursive: true)
@@ -123,6 +126,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
         }
         
         if let anchor = anchor as? CustomARAnchor {
+            timerMessage.invalidate()
             print("anchor: " + anchor.name! + "; scale: " + anchor.modelScale)
             switch anchor.name {
                 case "biplane":
