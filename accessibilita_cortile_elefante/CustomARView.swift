@@ -233,8 +233,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
         case "greenSquare":
             
             let planeMesh = MeshResource.generatePlane(width: 0.3, depth: 0.3)
-            var planeMaterial = SimpleMaterial()
-            planeMaterial.baseColor = MaterialColorParameter.color(.green)
+            let planeMaterial = SimpleMaterial(color: .green, isMetallic: false)
             let planeModel = ModelEntity(mesh: planeMesh, materials: [planeMaterial])
                         
             addModel(planeModel, to: anchorEntity, mappedWith: arAnchor)
@@ -242,8 +241,7 @@ class CustomARView: UIViewController, ARSessionDelegate {
             break
         case "redSquare":
             let planeMesh = MeshResource.generatePlane(width: 0.3, depth: 0.3)
-            var planeMaterial = SimpleMaterial()
-            planeMaterial.baseColor = MaterialColorParameter.color(.red)
+            let planeMaterial = SimpleMaterial(color: .red, isMetallic: false)
             let planeModel = ModelEntity(mesh: planeMesh, materials: [planeMaterial])
                         
             addModel(planeModel, to: anchorEntity, mappedWith: arAnchor)
@@ -321,16 +319,14 @@ class CustomARView: UIViewController, ARSessionDelegate {
                     break
                 case "greenSquare":
                     let planeMesh = MeshResource.generatePlane(width: 0.3, depth: 0.3)
-                    var planeMaterial = UnlitMaterial()
-                    planeMaterial.baseColor = MaterialColorParameter.color(.green)
+                let planeMaterial = SimpleMaterial(color: .green, isMetallic: false)
                     let planeModel = ModelEntity(mesh: planeMesh, materials: [planeMaterial])
                     adjustModelEntity(planeModel, anchor)
                     anchorEntity.addChild(planeModel)
                     break
                 case "redSquare":
                     let planeMesh = MeshResource.generatePlane(width: 0.3, depth: 0.3)
-                    var planeMaterial = UnlitMaterial()
-                    planeMaterial.baseColor = MaterialColorParameter.color(.red)
+                    let planeMaterial = SimpleMaterial(color: .red, isMetallic: false)
                     let planeModel = ModelEntity(mesh: planeMesh, materials: [planeMaterial])
                     adjustModelEntity(planeModel, anchor)
                     anchorEntity.addChild(planeModel)
