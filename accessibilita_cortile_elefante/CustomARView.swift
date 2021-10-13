@@ -91,6 +91,8 @@ class CustomARView: UIViewController, ARSessionDelegate {
             showAlert(title: "Found world map!", message: "Found existing world map. If you didn't mean to load an existing map, be sure not to have a file named WorldMap in the root directory of the project.")
             loadExperience()
         }
+        self.arView.environment.sceneUnderstanding.options.insert([.collision, .occlusion])
+        
         createWorldMapsFolder()
         enableObjectRemoval()
     }
