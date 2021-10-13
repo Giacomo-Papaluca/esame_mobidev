@@ -20,7 +20,6 @@
 		2419C43126F0A2C3002BCD58 /* CustomARAnchor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2419C43026F0A2C3002BCD58 /* CustomARAnchor.swift */; };
 		24765A4C26FA099100297D47 /* dangerLine.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 24765A4B26FA099100297D47 /* dangerLine.usdz */; };
 		2495326026F3361500715F55 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2495325F26F3361500715F55 /* Model.swift */; };
-		24DC637F2716E698004B92E2 /* WorldMap in Resources */ = {isa = PBXBuildFile; fileRef = 24DC637E2716E698004B92E2 /* WorldMap */; };
 		24FB84AE26FCC2F50043CC3E /* gioconda.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 24FB84AD26FCC2F50043CC3E /* gioconda.usdz */; };
 		24FB84B026FCC3060043CC3E /* arrow.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 24FB84AF26FCC3060043CC3E /* arrow.usdz */; };
 /* End PBXBuildFile section */
@@ -63,7 +62,6 @@
 		24765A3E26F9FC3000297D47 /* gioconda.rcproject */ = {isa = PBXFileReference; lastKnownFileType = file.rcproject; path = gioconda.rcproject; sourceTree = "<group>"; };
 		24765A4B26FA099100297D47 /* dangerLine.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = dangerLine.usdz; sourceTree = "<group>"; };
 		2495325F26F3361500715F55 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
-		24DC637E2716E698004B92E2 /* WorldMap */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; name = WorldMap; path = ../../../cont2.xcappdata/AppData/Documents/WorldMaps/WorldMap; sourceTree = "<group>"; };
 		24FB84AD26FCC2F50043CC3E /* gioconda.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; name = gioconda.usdz; path = ../../../../gioconda.usdz; sourceTree = "<group>"; };
 		24FB84AF26FCC3060043CC3E /* arrow.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; name = arrow.usdz; path = ../../../../arrow.usdz; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -116,7 +114,6 @@
 		2413AD6826CD66E900D7DBA8 /* accessibilita_cortile_elefante */ = {
 			isa = PBXGroup;
 			children = (
-				24DC637E2716E698004B92E2 /* WorldMap */,
 				2417588826E9FBA3007F387E /* Models */,
 				2413AD6926CD66E900D7DBA8 /* AppDelegate.swift */,
 				2413AD6B26CD66E900D7DBA8 /* ContentView.swift */,
@@ -279,7 +276,6 @@
 				24117F9926E7B22E0009005B /* CustomARView.xib in Resources */,
 				24765A4C26FA099100297D47 /* dangerLine.usdz in Resources */,
 				2417588A26E9FBD0007F387E /* toy_biplane.usdz in Resources */,
-				24DC637F2716E698004B92E2 /* WorldMap in Resources */,
 				2413AD7026CD66EA00D7DBA8 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

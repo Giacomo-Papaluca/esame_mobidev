@@ -52,7 +52,8 @@ class CustomARView: UIViewController, ARSessionDelegate {
         self.arView.debugOptions = [ .showFeaturePoints ]
         self.loadExperience()
         self.arView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(recognizer:))))
-
+        self.arView.environment.sceneUnderstanding.options.insert([.occlusion, .collision])
+        
         timerMessage = Timer.scheduledTimer(withTimeInterval: 20.0, repeats: false) {_ in self.showAlert(title: "stanza non riconosciuta", message: "accertarsi di essere nel cortile dell'elefante")}
         print(timerMessage.fireDate)
     }
