@@ -143,14 +143,14 @@ class CustomARView: UIViewController, ARSessionDelegate {
                     break
                 case "greenSquare":
                     let planeMesh = MeshResource.generatePlane(width: 0.3, depth: 0.3)
-                let planeMaterial = SimpleMaterial(color: .green, isMetallic: false)
+                    let planeMaterial = SimpleMaterial(color: .green, roughness: MaterialScalarParameter(floatLiteral: 1), isMetallic: false)
                     let planeModel = ModelEntity(mesh: planeMesh, materials: [planeMaterial])
                     adjustModelEntity(planeModel, anchor)
                     anchorEntity.addChild(planeModel)
                     break
                 case "redSquare":
                     let planeMesh = MeshResource.generatePlane(width: 0.3, depth: 0.3)
-                let planeMaterial = SimpleMaterial(color: .red, isMetallic: false)
+                    let planeMaterial = SimpleMaterial(color: .red, roughness: MaterialScalarParameter(floatLiteral: 1), isMetallic: false)
                     let planeModel = ModelEntity(mesh: planeMesh, materials: [planeMaterial])
                     adjustModelEntity(planeModel, anchor)
                     anchorEntity.addChild(planeModel)
