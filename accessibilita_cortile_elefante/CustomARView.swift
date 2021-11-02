@@ -114,18 +114,22 @@ class CustomARView: UIViewController, ARSessionDelegate {
     }
     
     func addAnchorEntityToScene(anchor: ARAnchor) {
-        let anchorEntity = AnchorEntity(anchor: anchor)
+        //let anchorEntity = AnchorEntity(anchor: anchor)
         
-        if let _ = anchor as? ARImageAnchor {
+        if let imageAnchor = anchor as? ARImageAnchor {
+            let anchorEntity = AnchorEntity(anchor: imageAnchor)
             timerMessage.invalidate()
             print("image found")
-            let gioconda = controlledLoadModelAsync(named: "gioconda")
+            let gioconda = controlledLoadModelAsync(named: "gioconda").clone(recursive: true)
             gioconda.generateCollisionShapes(recursive: true)
             gioconda.name = "gioconda"
             anchorEntity.addChild(gioconda)
+            self.arView.scene.anchors.append(anchorEntity)
+
         }
         
         if let anchor = anchor as? CustomARAnchor {
+            let anchorEntity = AnchorEntity(anchor: anchor)
             timerMessage.invalidate()
             print("anchor: " + anchor.name! + "; scale: " + anchor.modelScale)
             switch anchor.name {
@@ -163,9 +167,9 @@ class CustomARView: UIViewController, ARSessionDelegate {
                 default:
                     return
             }
+            self.arView.scene.anchors.append(anchorEntity)
         }
         
-        self.arView.scene.anchors.append(anchorEntity)
     }
     
     // MARK: -Parsing custom anchor properties
