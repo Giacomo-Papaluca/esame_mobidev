@@ -49,7 +49,6 @@ class CustomARView: UIViewController, ARSessionDelegate {
     func setup() {
         self.arView.session.run(defaultConfiguration)
         self.arView.session.delegate = self
-        self.arView.debugOptions = [ .showFeaturePoints ]
         self.loadExperience()
         self.arView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(recognizer:))))
         self.arView.environment.sceneUnderstanding.options.insert([.occlusion, .collision])
