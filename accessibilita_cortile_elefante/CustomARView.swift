@@ -35,13 +35,14 @@ class CustomARView: UIViewController, ARSessionDelegate {
     } ()
     
     var defaultConfiguration: ARWorldTrackingConfiguration {
-            let configuration = ARWorldTrackingConfiguration()
+        let configuration = ARWorldTrackingConfiguration()
         configuration.planeDetection = [.horizontal, .vertical]
-            configuration.environmentTexturing = .automatic
-            if ARWorldTrackingConfiguration.supportsSceneReconstruction(.mesh) {
-                configuration.sceneReconstruction = .mesh
-            }
-            return configuration
+        configuration.environmentTexturing = .automatic
+        if ARWorldTrackingConfiguration.supportsSceneReconstruction(.mesh) {
+            configuration.sceneReconstruction = .mesh
+        }
+        configuration.maximumNumberOfTrackedImages = 1
+        return configuration
     }
     
     // MARK: - Init and setup
@@ -54,13 +55,17 @@ class CustomARView: UIViewController, ARSessionDelegate {
         self.arView.environment.sceneUnderstanding.options.insert([.occlusion, .collision])
         
         timerMessage = Timer.scheduledTimer(withTimeInterval: 20.0, repeats: false) {_ in self.showAlert(title: "stanza non riconosciuta", message: "accertarsi di essere nel cortile dell'elefante")}
-        print(timerMessage.fireDate)
+        //disabilitiamo lo stop device
+        UIApplication.shared.isIdleTimerDisabled = true
+        
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setup()
         // Do any additional setup after loading the view.
+        //abilitiamo il sensore lidar e quindi l'occlusione
+        self.arView.environment.sceneUnderstanding.options.insert(.occlusion)
     }
     
     // MARK: - User intreractions
@@ -113,14 +118,12 @@ class CustomARView: UIViewController, ARSessionDelegate {
         toyBiplaneEntity.transform.rotation = modelRotationToSimd_quatf(rotation: anchor.modelRotation)
     }
     
-    func addAnchorEntityToScene(anchor: ARAnchor) {
-        //let anchorEntity = AnchorEntity(anchor: anchor)
-        
+    func addAnchorEntityToScene(anchor: ARAnchor) {        
         if let imageAnchor = anchor as? ARImageAnchor {
             let anchorEntity = AnchorEntity(anchor: imageAnchor)
             timerMessage.invalidate()
             print("image found")
-            let gioconda = controlledLoadModelAsync(named: "gioconda").clone(recursive: true)
+            let gioconda = controlledLoadModelAsync(named: "gioconda")
             gioconda.generateCollisionShapes(recursive: true)
             gioconda.name = "gioconda"
             anchorEntity.addChild(gioconda)
