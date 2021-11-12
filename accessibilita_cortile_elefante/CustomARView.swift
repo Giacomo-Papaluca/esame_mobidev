@@ -42,10 +42,13 @@ class CustomARView: UIViewController, ARSessionDelegate {
     
     
     var defaultConfiguration: ARWorldTrackingConfiguration {
-            let configuration = ARWorldTrackingConfiguration()
-            configuration.planeDetection = .horizontal
-            configuration.environmentTexturing = .automatic
-            return configuration
+        let configuration = ARWorldTrackingConfiguration()
+        configuration.planeDetection = .horizontal
+        configuration.environmentTexturing = .automatic
+        if ARWorldTrackingConfiguration.supportsSceneReconstruction(.mesh) {
+            configuration.sceneReconstruction = .mesh
+        }
+        return configuration
     }
     
     @IBOutlet var showMenuButton: UIButton!
@@ -301,11 +304,6 @@ class CustomARView: UIViewController, ARSessionDelegate {
     func addAnchorEntityToScene(anchor: ARAnchor) {
         let anchorEntity = AnchorEntity(anchor: anchor)
         
-        if let _ = anchor as? ARImageAnchor {
-            print("image found")
-            let gioconda = models.first(where: {$0.modelName == "gioconda"})!.modelEntity!
-            anchorEntity.addChild(gioconda)
-        }
         
         if let anchor = anchor as? CustomARAnchor {
             print("anchor: " + anchor.name! + "; scale: " + anchor.modelScale)
